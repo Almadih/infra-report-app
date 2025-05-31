@@ -51,7 +51,7 @@ export const useReportQuery = (
   lng?: number
 ) => {
   return useQuery({
-    queryKey: ["reports", lat, lng],
+    queryKey: ["reports", lat, lng, radius],
     queryFn: () => fetchReports(radius, lat, lng),
     staleTime: Infinity,
     enabled: !!lat && !!lng && isOnline,
