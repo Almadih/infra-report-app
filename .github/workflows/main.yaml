@@ -3,26 +3,42 @@ on:
     branches:
       - main
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
+
     steps:
-      - name: 🏗 Setup repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: 🏗 Setup Node
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.x
-          cache: npm
+          node-version: 18
 
-      - name: 🏗 Setup EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
 
-      - name: 📦 Install dependencies
+      - name: Log in to Expo
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas login --token $EXPO_TOKEN
+
+      - name: Install dependencies
         run: npm install
 
-      - name: 🚀 Build app
-        run: eas build -p android --non-interactive
+      - name: Build APK with EAS
+        run: eas build --platform android --profile production --non-interactive --wait
+
+      - name: Download build artifact
+        id: download
+        run: |
+          BUILD_URL=$(eas build:list --status finished --limit 1 | grep -o 'https.*\.apk')
+          curl -o app.apk "$BUILD_URL"
+          echo "APK downloaded from $BUILD_URL"
+
+      - name: Upload APK to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
