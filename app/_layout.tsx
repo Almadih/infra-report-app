@@ -66,6 +66,7 @@ function RootLayoutNav() {
   const { isCompleteBoarding } = useReportStore();
   const { isLoggedIn, FCMToken, setFCMToken } = useAuthStore();
   const router = useRouter();
+  console.log(process.env);
 
   useEffect(() => {
     const getFCMToken = async () => {
