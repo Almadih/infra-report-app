@@ -21,6 +21,7 @@ sealed class Report with _$Report {
     @JsonKey(name: 'damage_type') required DamageType damageType,
     required Severity severity,
     required Status status,
+    @Default([]) List<ReportUpdate> updates,
     @Default([]) List<ReportImage> images,
   }) = _Report;
 
@@ -36,6 +37,19 @@ sealed class ReportLocation with _$ReportLocation {
 
   factory ReportLocation.fromJson(Map<String, dynamic> json) =>
       _$ReportLocationFromJson(json);
+}
+
+@freezed
+sealed class ReportUpdate with _$ReportUpdate {
+  const factory ReportUpdate({
+    required int id,
+    required String text,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'updated_at') required DateTime updatedAt,
+  }) = _ReportUpdate;
+
+  factory ReportUpdate.fromJson(Map<String, dynamic> json) =>
+      _$ReportUpdateFromJson(json);
 }
 
 @freezed

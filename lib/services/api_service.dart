@@ -98,7 +98,7 @@ class ApiService {
           'radius': radius,
         },
       );
-      print(jsonEncode(response.data));
+
       if (response.statusCode == 200) {
         List<dynamic> data = response.data is List
             ? response.data

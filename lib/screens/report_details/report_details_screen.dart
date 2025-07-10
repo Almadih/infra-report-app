@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_application_1/models/report_model.dart' as app_models;
+import 'package:flutter_application_1/screens/report_details/widgets/report_update_tile.dart';
 import 'package:flutter_application_1/widgets/authenticated_image.dart';
 import 'package:flutter_application_1/screens/history/widgets/severity_badge.dart';
 import 'package:flutter_application_1/screens/report_details/widgets/fullscreen_image_viewer.dart';
@@ -15,6 +16,46 @@ class ReportDetailsScreen extends StatefulWidget {
 
   @override
   State<ReportDetailsScreen> createState() => _ReportDetailsScreenState();
+}
+
+// Create a new builder method for the updates section
+Widget _buildUpdatesSection(BuildContext context, app_models.Report report) {
+  final theme = Theme.of(context);
+
+  // --- CONDITIONAL RENDERING ---
+  // If there are no updates, return an empty widget to hide the section.
+  if (report.updates.isEmpty) {
+    return const SizedBox.shrink();
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Divider(),
+      const SizedBox(height: 16),
+      Text(
+        'Report Updates',
+        style: theme.textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 16),
+      // Use ListView.builder for performance with many updates
+      ListView.builder(
+        itemCount: report.updates.length,
+        shrinkWrap: true, // Important inside a SingleChildScrollView
+        physics: const NeverScrollableScrollPhysics(), // Let the parent scroll
+        itemBuilder: (context, index) {
+          final update = report.updates[index];
+          return ReportUpdateTile(
+            update: update,
+            isFirst: index == 0,
+            isLast: index == report.updates.length - 1,
+          );
+        },
+      ),
+    ],
+  );
 }
 
 class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
@@ -186,6 +227,7 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                     ),
                   ),
                   StatusStepper(currentStatus: report.status.name),
+                  _buildUpdatesSection(context, report),
                   const Divider(),
                   const SizedBox(height: 16),
 

@@ -1,5 +1,6 @@
 // lib/database/database.dart
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -27,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 9; // Increment this when you change tables
+  int get schemaVersion => 10; // Increment this when you change tables
 
   @override
   MigrationStrategy get migration {
@@ -222,6 +223,7 @@ class AppDatabase extends _$AppDatabase {
             id: dbReport.statusId,
             name: dbReport.statusName,
           ),
+          updates: _reportUpdatesFromJson(dbReport.updates),
           images: dbImages
               .map(
                 (img) => app_models.ReportImage(
@@ -235,6 +237,13 @@ class AppDatabase extends _$AppDatabase {
       );
     }
     return appReports;
+  }
+
+  List<app_models.ReportUpdate> _reportUpdatesFromJson(String jsonString) {
+    final List<dynamic> jsonList = jsonDecode(jsonString);
+    return jsonList
+        .map((json) => app_models.ReportUpdate.fromJson(json))
+        .toList();
   }
 
   Future<void> cacheApiReports(List<app_models.Report> apiReports) async {
@@ -262,6 +271,7 @@ class AppDatabase extends _$AppDatabase {
             damageTypeName: apiReport.damageType.name,
             severityName: apiReport.severity.name,
             statusName: apiReport.status.name,
+            updates: Value(jsonEncode(apiReport.updates)),
           ),
           mode: InsertMode.insertOrReplace,
         );

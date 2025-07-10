@@ -21,6 +21,11 @@ _Report _$ReportFromJson(Map<String, dynamic> json) => _Report(
   damageType: DamageType.fromJson(json['damage_type'] as Map<String, dynamic>),
   severity: Severity.fromJson(json['severity'] as Map<String, dynamic>),
   status: Status.fromJson(json['status'] as Map<String, dynamic>),
+  updates:
+      (json['updates'] as List<dynamic>?)
+          ?.map((e) => ReportUpdate.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
   images:
       (json['images'] as List<dynamic>?)
           ?.map((e) => ReportImage.fromJson(e as Map<String, dynamic>))
@@ -43,6 +48,7 @@ Map<String, dynamic> _$ReportToJson(_Report instance) => <String, dynamic>{
   'damage_type': instance.damageType,
   'severity': instance.severity,
   'status': instance.status,
+  'updates': instance.updates,
   'images': instance.images,
 };
 
@@ -58,6 +64,22 @@ Map<String, dynamic> _$ReportLocationToJson(_ReportLocation instance) =>
     <String, dynamic>{
       'type': instance.type,
       'coordinates': instance.coordinates,
+    };
+
+_ReportUpdate _$ReportUpdateFromJson(Map<String, dynamic> json) =>
+    _ReportUpdate(
+      id: (json['id'] as num).toInt(),
+      text: json['text'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+    );
+
+Map<String, dynamic> _$ReportUpdateToJson(_ReportUpdate instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'text': instance.text,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
     };
 
 _DamageType _$DamageTypeFromJson(Map<String, dynamic> json) => _DamageType(

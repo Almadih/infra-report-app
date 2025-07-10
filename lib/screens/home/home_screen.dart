@@ -273,6 +273,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           },
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stackTrace) {
+            print(error);
+            print(stackTrace);
             // The UI in case of error can now be simpler, as the dialog handles the details.
             return Center(
               child: Padding(
