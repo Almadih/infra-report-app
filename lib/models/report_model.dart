@@ -23,6 +23,7 @@ sealed class Report with _$Report {
     required Status status,
     @Default([]) List<ReportUpdate> updates,
     @Default([]) List<ReportImage> images,
+    @Default([]) List<ReportFlag> flags,
   }) = _Report;
 
   factory Report.fromJson(Map<String, dynamic> json) => _$ReportFromJson(json);
@@ -37,6 +38,21 @@ sealed class ReportLocation with _$ReportLocation {
 
   factory ReportLocation.fromJson(Map<String, dynamic> json) =>
       _$ReportLocationFromJson(json);
+}
+
+@freezed
+sealed class ReportFlag with _$ReportFlag {
+  const factory ReportFlag({
+    required int id,
+    required String type, // e.g., 'duplicate', 'low_quality', 'inappropriate'
+    required String reason, // The optional reason provided by the admin
+    @JsonKey(name: 'duplicated_report_id')
+    String? duplicatedReportId, // The ID of the duplicated report
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+  }) = _ReportFlag;
+
+  factory ReportFlag.fromJson(Map<String, dynamic> json) =>
+      _$ReportFlagFromJson(json);
 }
 
 @freezed

@@ -17,6 +17,7 @@ class LocalReports extends Table {
   DateTimeColumn get updatedAt => dateTime().named('updated_at')();
   TextColumn get city => text().nullable()();
   TextColumn get updates => text().withDefault(const Constant('[]'))();
+  TextColumn get flags => text().withDefault(const Constant('[]'))();
 
   // Denormalized data for easier display from cache
   TextColumn get damageTypeName => text().named('damage_type_name')();

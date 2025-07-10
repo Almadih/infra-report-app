@@ -28,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 10; // Increment this when you change tables
+  int get schemaVersion => 11; // Increment this when you change tables
 
   @override
   MigrationStrategy get migration {
@@ -224,6 +224,7 @@ class AppDatabase extends _$AppDatabase {
             name: dbReport.statusName,
           ),
           updates: _reportUpdatesFromJson(dbReport.updates),
+          flags: _reportFlagsFromJson(dbReport.flags),
           images: dbImages
               .map(
                 (img) => app_models.ReportImage(
@@ -243,6 +244,13 @@ class AppDatabase extends _$AppDatabase {
     final List<dynamic> jsonList = jsonDecode(jsonString);
     return jsonList
         .map((json) => app_models.ReportUpdate.fromJson(json))
+        .toList();
+  }
+
+  List<app_models.ReportFlag> _reportFlagsFromJson(String jsonString) {
+    final List<dynamic> jsonList = jsonDecode(jsonString);
+    return jsonList
+        .map((json) => app_models.ReportFlag.fromJson(json))
         .toList();
   }
 
@@ -272,6 +280,7 @@ class AppDatabase extends _$AppDatabase {
             severityName: apiReport.severity.name,
             statusName: apiReport.status.name,
             updates: Value(jsonEncode(apiReport.updates)),
+            flags: Value(jsonEncode(apiReport.flags)),
           ),
           mode: InsertMode.insertOrReplace,
         );
@@ -421,7 +430,6 @@ class AppDatabase extends _$AppDatabase {
   Future<void> cacheApiNotifications(
     List<AppNotification> apiNotifications,
   ) async {
-    print(apiNotifications.first);
     await batch((batch) {
       batch.deleteAll(notifications);
       batch.insertAll(

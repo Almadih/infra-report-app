@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_application_1/models/report_model.dart' as app_models;
+import 'package:flutter_application_1/screens/report_details/widgets/report_flag_card.dart';
 import 'package:flutter_application_1/screens/report_details/widgets/report_update_tile.dart';
 import 'package:flutter_application_1/widgets/authenticated_image.dart';
 import 'package:flutter_application_1/screens/history/widgets/severity_badge.dart';
@@ -54,6 +55,47 @@ Widget _buildUpdatesSection(BuildContext context, app_models.Report report) {
           );
         },
       ),
+    ],
+  );
+}
+
+Widget _buildFlagsSection(BuildContext context, app_models.Report report) {
+  final theme = Theme.of(context);
+
+  // --- CONDITIONAL RENDERING ---
+  // If there are no flags, return an empty widget to hide the section.
+  if (report.flags.isEmpty) {
+    return const SizedBox.shrink();
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SizedBox(height: 16),
+      Row(
+        children: [
+          Icon(Icons.flag_circle, color: theme.colorScheme.error),
+          const SizedBox(width: 8),
+          Text(
+            'Flags',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.error,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 12),
+      // Use ListView.builder for performance with many flags
+      ListView.builder(
+        itemCount: report.flags.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return ReportFlagCard(flag: report.flags[index]);
+        },
+      ),
+      const Divider(),
     ],
   );
 }
@@ -227,6 +269,8 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                     ),
                   ),
                   StatusStepper(currentStatus: report.status.name),
+                  _buildFlagsSection(context, report),
+
                   _buildUpdatesSection(context, report),
                   const Divider(),
                   const SizedBox(height: 16),

@@ -31,6 +31,11 @@ _Report _$ReportFromJson(Map<String, dynamic> json) => _Report(
           ?.map((e) => ReportImage.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
+  flags:
+      (json['flags'] as List<dynamic>?)
+          ?.map((e) => ReportFlag.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$ReportToJson(_Report instance) => <String, dynamic>{
@@ -50,6 +55,7 @@ Map<String, dynamic> _$ReportToJson(_Report instance) => <String, dynamic>{
   'status': instance.status,
   'updates': instance.updates,
   'images': instance.images,
+  'flags': instance.flags,
 };
 
 _ReportLocation _$ReportLocationFromJson(Map<String, dynamic> json) =>
@@ -64,6 +70,23 @@ Map<String, dynamic> _$ReportLocationToJson(_ReportLocation instance) =>
     <String, dynamic>{
       'type': instance.type,
       'coordinates': instance.coordinates,
+    };
+
+_ReportFlag _$ReportFlagFromJson(Map<String, dynamic> json) => _ReportFlag(
+  id: (json['id'] as num).toInt(),
+  type: json['type'] as String,
+  reason: json['reason'] as String,
+  duplicatedReportId: json['duplicated_report_id'] as String?,
+  createdAt: DateTime.parse(json['created_at'] as String),
+);
+
+Map<String, dynamic> _$ReportFlagToJson(_ReportFlag instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'reason': instance.reason,
+      'duplicated_report_id': instance.duplicatedReportId,
+      'created_at': instance.createdAt.toIso8601String(),
     };
 
 _ReportUpdate _$ReportUpdateFromJson(Map<String, dynamic> json) =>
