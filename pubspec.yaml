@@ -1,0 +1,66 @@
+name: flutter_application_1
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+  riverpod_annotation: ^2.6.1
+  google_maps_flutter: ^2.12.2 # Check for latest version
+  dio: ^5.4.0 # For API calls
+  image_picker: ^1.0.7 # Check for latest version
+  geolocator: ^11.0.0 # Check for latest version
+  permission_handler: ^11.3.0 # Check for latest version
+  flutter_staggered_grid_view: ^0.7.0 # For image preview grid
+  intl: ^0.20.2
+  shimmer: ^3.0.0
+  scaffold_gradient_background: ^1.0.3+1
+  connectivity_plus: ^6.1.4
+  # For local database
+  drift: ^2.27.0 # Check for latest
+  sqlite3_flutter_libs: ^0.5.18 # Bundles the native SQLite library
+  path: ^1.8.3
+  # For finding a path to store the database
+  path_provider: ^2.1.5
+  # For unique IDs for offline reports
+  uuid: ^4.3.3
+  # For device info for Hive adapters
+  device_info_plus: ^9.1.2 # Useful for adapters, optional but good practice
+  mobile_device_identifier: ^0.0.3
+  flutter_secure_storage: ^9.2.4
+  cached_network_image: ^3.4.1
+  cached_network_image_platform_interface: ^4.1.1
+  carousel_slider: ^5.1.1
+  photo_view: ^0.15.0
+  flutter_cache_manager:
+  http:
+  geocoding: ^4.0.0
+  firebase_core: ^3.14.0
+  firebase_messaging: ^15.2.7
+  flutter_local_notifications: ^19.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  riverpod_generator: ^2.6.5
+  build_runner: ^2.4.15
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.5
+  freezed: ^3.0.6
+  json_serializable: ^6.9.5
+  drift_dev: ^2.27.0
+  drift_db_viewer:
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/maps_dark_mode.json
+    - assets/onboarding/

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "684617375721",
+    "project_id": "typechatter",
+    "storage_bucket": "typechatter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684617375721:android:3fb52a7d25ad182753b578",
+        "android_client_info": {
+          "package_name": "almadih.dev.infraReport"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbs3u1uT6Ansj3k0AQJ-7EAUD6EOItrSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684617375721:android:687ce511efdb4bdc53b578",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbs3u1uT6Ansj3k0AQJ-7EAUD6EOItrSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
