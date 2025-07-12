@@ -92,7 +92,9 @@ class ReportRepository {
 
   Future<void> forceRefreshMyReports() async {
     if (_isOnline) {
+      print("forceRefreshMyReports");
       final apiReports = await _apiService.fetchMyReports();
+      print(apiReports.first.flags);
       await _db.cacheApiMyReports(apiReports);
     } else {
       throw Exception("Cannot refresh while offline.");

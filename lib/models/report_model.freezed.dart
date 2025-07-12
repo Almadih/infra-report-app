@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Report {
 
- String get id;@JsonKey(name: 'user_id') int get userId;@JsonKey(name: 'severity_id') int get severityId;@JsonKey(name: 'status_id') int get statusId;@JsonKey(name: 'damage_type_id') int get damageTypeId; ReportLocation get location; String? get description; String get address;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'updated_at') DateTime get updatedAt; String? get city;@JsonKey(name: 'damage_type') DamageType get damageType; Severity get severity; Status get status; List<ReportUpdate> get updates; List<ReportImage> get images; List<ReportFlag> get flags;
+ String get id;@JsonKey(name: 'user_id') int get userId;@JsonKey(name: 'severity_id') int get severityId;@JsonKey(name: 'status_id') int get statusId;@JsonKey(name: 'damage_type_id') int get damageTypeId; ReportLocation get location; String? get description; String get address;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'updated_at') DateTime get updatedAt; String? get city;@JsonKey(name: 'damage_type') DamageType get damageType; Severity get severity; Status get status; ReportUser? get user; List<ReportUpdate> get updates; List<ReportImage> get images; List<ReportFlag> get flags;
 /// Create a copy of Report
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $ReportCopyWith<Report> get copyWith => _$ReportCopyWithImpl<Report>(this as Rep
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Report&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.severityId, severityId) || other.severityId == severityId)&&(identical(other.statusId, statusId) || other.statusId == statusId)&&(identical(other.damageTypeId, damageTypeId) || other.damageTypeId == damageTypeId)&&(identical(other.location, location) || other.location == location)&&(identical(other.description, description) || other.description == description)&&(identical(other.address, address) || other.address == address)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.city, city) || other.city == city)&&(identical(other.damageType, damageType) || other.damageType == damageType)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.updates, updates)&&const DeepCollectionEquality().equals(other.images, images)&&const DeepCollectionEquality().equals(other.flags, flags));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Report&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.severityId, severityId) || other.severityId == severityId)&&(identical(other.statusId, statusId) || other.statusId == statusId)&&(identical(other.damageTypeId, damageTypeId) || other.damageTypeId == damageTypeId)&&(identical(other.location, location) || other.location == location)&&(identical(other.description, description) || other.description == description)&&(identical(other.address, address) || other.address == address)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.city, city) || other.city == city)&&(identical(other.damageType, damageType) || other.damageType == damageType)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user)&&const DeepCollectionEquality().equals(other.updates, updates)&&const DeepCollectionEquality().equals(other.images, images)&&const DeepCollectionEquality().equals(other.flags, flags));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,severityId,statusId,damageTypeId,location,description,address,createdAt,updatedAt,city,damageType,severity,status,const DeepCollectionEquality().hash(updates),const DeepCollectionEquality().hash(images),const DeepCollectionEquality().hash(flags));
+int get hashCode => Object.hash(runtimeType,id,userId,severityId,statusId,damageTypeId,location,description,address,createdAt,updatedAt,city,damageType,severity,status,user,const DeepCollectionEquality().hash(updates),const DeepCollectionEquality().hash(images),const DeepCollectionEquality().hash(flags));
 
 @override
 String toString() {
-  return 'Report(id: $id, userId: $userId, severityId: $severityId, statusId: $statusId, damageTypeId: $damageTypeId, location: $location, description: $description, address: $address, createdAt: $createdAt, updatedAt: $updatedAt, city: $city, damageType: $damageType, severity: $severity, status: $status, updates: $updates, images: $images, flags: $flags)';
+  return 'Report(id: $id, userId: $userId, severityId: $severityId, statusId: $statusId, damageTypeId: $damageTypeId, location: $location, description: $description, address: $address, createdAt: $createdAt, updatedAt: $updatedAt, city: $city, damageType: $damageType, severity: $severity, status: $status, user: $user, updates: $updates, images: $images, flags: $flags)';
 }
 
 
@@ -49,11 +49,11 @@ abstract mixin class $ReportCopyWith<$Res>  {
   factory $ReportCopyWith(Report value, $Res Function(Report) _then) = _$ReportCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'user_id') int userId,@JsonKey(name: 'severity_id') int severityId,@JsonKey(name: 'status_id') int statusId,@JsonKey(name: 'damage_type_id') int damageTypeId, ReportLocation location, String? description, String address,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'updated_at') DateTime updatedAt, String? city,@JsonKey(name: 'damage_type') DamageType damageType, Severity severity, Status status, List<ReportUpdate> updates, List<ReportImage> images, List<ReportFlag> flags
+ String id,@JsonKey(name: 'user_id') int userId,@JsonKey(name: 'severity_id') int severityId,@JsonKey(name: 'status_id') int statusId,@JsonKey(name: 'damage_type_id') int damageTypeId, ReportLocation location, String? description, String address,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'updated_at') DateTime updatedAt, String? city,@JsonKey(name: 'damage_type') DamageType damageType, Severity severity, Status status, ReportUser? user, List<ReportUpdate> updates, List<ReportImage> images, List<ReportFlag> flags
 });
 
 
-$ReportLocationCopyWith<$Res> get location;$DamageTypeCopyWith<$Res> get damageType;$SeverityCopyWith<$Res> get severity;$StatusCopyWith<$Res> get status;
+$ReportLocationCopyWith<$Res> get location;$DamageTypeCopyWith<$Res> get damageType;$SeverityCopyWith<$Res> get severity;$StatusCopyWith<$Res> get status;$ReportUserCopyWith<$Res>? get user;
 
 }
 /// @nodoc
@@ -66,7 +66,7 @@ class _$ReportCopyWithImpl<$Res>
 
 /// Create a copy of Report
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? severityId = null,Object? statusId = null,Object? damageTypeId = null,Object? location = null,Object? description = freezed,Object? address = null,Object? createdAt = null,Object? updatedAt = null,Object? city = freezed,Object? damageType = null,Object? severity = null,Object? status = null,Object? updates = null,Object? images = null,Object? flags = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? severityId = null,Object? statusId = null,Object? damageTypeId = null,Object? location = null,Object? description = freezed,Object? address = null,Object? createdAt = null,Object? updatedAt = null,Object? city = freezed,Object? damageType = null,Object? severity = null,Object? status = null,Object? user = freezed,Object? updates = null,Object? images = null,Object? flags = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -82,7 +82,8 @@ as DateTime,city: freezed == city ? _self.city : city // ignore: cast_nullable_t
 as String?,damageType: null == damageType ? _self.damageType : damageType // ignore: cast_nullable_to_non_nullable
 as DamageType,severity: null == severity ? _self.severity : severity // ignore: cast_nullable_to_non_nullable
 as Severity,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as Status,updates: null == updates ? _self.updates : updates // ignore: cast_nullable_to_non_nullable
+as Status,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as ReportUser?,updates: null == updates ? _self.updates : updates // ignore: cast_nullable_to_non_nullable
 as List<ReportUpdate>,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
 as List<ReportImage>,flags: null == flags ? _self.flags : flags // ignore: cast_nullable_to_non_nullable
 as List<ReportFlag>,
@@ -124,6 +125,18 @@ $StatusCopyWith<$Res> get status {
   return $StatusCopyWith<$Res>(_self.status, (value) {
     return _then(_self.copyWith(status: value));
   });
+}/// Create a copy of Report
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ReportUserCopyWith<$Res>? get user {
+    if (_self.user == null) {
+    return null;
+  }
+
+  return $ReportUserCopyWith<$Res>(_self.user!, (value) {
+    return _then(_self.copyWith(user: value));
+  });
 }
 }
 
@@ -132,7 +145,7 @@ $StatusCopyWith<$Res> get status {
 @JsonSerializable()
 
 class _Report implements Report {
-  const _Report({required this.id, @JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'severity_id') required this.severityId, @JsonKey(name: 'status_id') required this.statusId, @JsonKey(name: 'damage_type_id') required this.damageTypeId, required this.location, this.description, required this.address, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'updated_at') required this.updatedAt, this.city, @JsonKey(name: 'damage_type') required this.damageType, required this.severity, required this.status, final  List<ReportUpdate> updates = const [], final  List<ReportImage> images = const [], final  List<ReportFlag> flags = const []}): _updates = updates,_images = images,_flags = flags;
+  const _Report({required this.id, @JsonKey(name: 'user_id') required this.userId, @JsonKey(name: 'severity_id') required this.severityId, @JsonKey(name: 'status_id') required this.statusId, @JsonKey(name: 'damage_type_id') required this.damageTypeId, required this.location, this.description, required this.address, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'updated_at') required this.updatedAt, this.city, @JsonKey(name: 'damage_type') required this.damageType, required this.severity, required this.status, this.user, final  List<ReportUpdate> updates = const [], final  List<ReportImage> images = const [], final  List<ReportFlag> flags = const []}): _updates = updates,_images = images,_flags = flags;
   factory _Report.fromJson(Map<String, dynamic> json) => _$ReportFromJson(json);
 
 @override final  String id;
@@ -149,6 +162,7 @@ class _Report implements Report {
 @override@JsonKey(name: 'damage_type') final  DamageType damageType;
 @override final  Severity severity;
 @override final  Status status;
+@override final  ReportUser? user;
  final  List<ReportUpdate> _updates;
 @override@JsonKey() List<ReportUpdate> get updates {
   if (_updates is EqualUnmodifiableListView) return _updates;
@@ -184,16 +198,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Report&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.severityId, severityId) || other.severityId == severityId)&&(identical(other.statusId, statusId) || other.statusId == statusId)&&(identical(other.damageTypeId, damageTypeId) || other.damageTypeId == damageTypeId)&&(identical(other.location, location) || other.location == location)&&(identical(other.description, description) || other.description == description)&&(identical(other.address, address) || other.address == address)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.city, city) || other.city == city)&&(identical(other.damageType, damageType) || other.damageType == damageType)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._updates, _updates)&&const DeepCollectionEquality().equals(other._images, _images)&&const DeepCollectionEquality().equals(other._flags, _flags));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Report&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.severityId, severityId) || other.severityId == severityId)&&(identical(other.statusId, statusId) || other.statusId == statusId)&&(identical(other.damageTypeId, damageTypeId) || other.damageTypeId == damageTypeId)&&(identical(other.location, location) || other.location == location)&&(identical(other.description, description) || other.description == description)&&(identical(other.address, address) || other.address == address)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.city, city) || other.city == city)&&(identical(other.damageType, damageType) || other.damageType == damageType)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.status, status) || other.status == status)&&(identical(other.user, user) || other.user == user)&&const DeepCollectionEquality().equals(other._updates, _updates)&&const DeepCollectionEquality().equals(other._images, _images)&&const DeepCollectionEquality().equals(other._flags, _flags));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,severityId,statusId,damageTypeId,location,description,address,createdAt,updatedAt,city,damageType,severity,status,const DeepCollectionEquality().hash(_updates),const DeepCollectionEquality().hash(_images),const DeepCollectionEquality().hash(_flags));
+int get hashCode => Object.hash(runtimeType,id,userId,severityId,statusId,damageTypeId,location,description,address,createdAt,updatedAt,city,damageType,severity,status,user,const DeepCollectionEquality().hash(_updates),const DeepCollectionEquality().hash(_images),const DeepCollectionEquality().hash(_flags));
 
 @override
 String toString() {
-  return 'Report(id: $id, userId: $userId, severityId: $severityId, statusId: $statusId, damageTypeId: $damageTypeId, location: $location, description: $description, address: $address, createdAt: $createdAt, updatedAt: $updatedAt, city: $city, damageType: $damageType, severity: $severity, status: $status, updates: $updates, images: $images, flags: $flags)';
+  return 'Report(id: $id, userId: $userId, severityId: $severityId, statusId: $statusId, damageTypeId: $damageTypeId, location: $location, description: $description, address: $address, createdAt: $createdAt, updatedAt: $updatedAt, city: $city, damageType: $damageType, severity: $severity, status: $status, user: $user, updates: $updates, images: $images, flags: $flags)';
 }
 
 
@@ -204,11 +218,11 @@ abstract mixin class _$ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
   factory _$ReportCopyWith(_Report value, $Res Function(_Report) _then) = __$ReportCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'user_id') int userId,@JsonKey(name: 'severity_id') int severityId,@JsonKey(name: 'status_id') int statusId,@JsonKey(name: 'damage_type_id') int damageTypeId, ReportLocation location, String? description, String address,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'updated_at') DateTime updatedAt, String? city,@JsonKey(name: 'damage_type') DamageType damageType, Severity severity, Status status, List<ReportUpdate> updates, List<ReportImage> images, List<ReportFlag> flags
+ String id,@JsonKey(name: 'user_id') int userId,@JsonKey(name: 'severity_id') int severityId,@JsonKey(name: 'status_id') int statusId,@JsonKey(name: 'damage_type_id') int damageTypeId, ReportLocation location, String? description, String address,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'updated_at') DateTime updatedAt, String? city,@JsonKey(name: 'damage_type') DamageType damageType, Severity severity, Status status, ReportUser? user, List<ReportUpdate> updates, List<ReportImage> images, List<ReportFlag> flags
 });
 
 
-@override $ReportLocationCopyWith<$Res> get location;@override $DamageTypeCopyWith<$Res> get damageType;@override $SeverityCopyWith<$Res> get severity;@override $StatusCopyWith<$Res> get status;
+@override $ReportLocationCopyWith<$Res> get location;@override $DamageTypeCopyWith<$Res> get damageType;@override $SeverityCopyWith<$Res> get severity;@override $StatusCopyWith<$Res> get status;@override $ReportUserCopyWith<$Res>? get user;
 
 }
 /// @nodoc
@@ -221,7 +235,7 @@ class __$ReportCopyWithImpl<$Res>
 
 /// Create a copy of Report
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? severityId = null,Object? statusId = null,Object? damageTypeId = null,Object? location = null,Object? description = freezed,Object? address = null,Object? createdAt = null,Object? updatedAt = null,Object? city = freezed,Object? damageType = null,Object? severity = null,Object? status = null,Object? updates = null,Object? images = null,Object? flags = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? severityId = null,Object? statusId = null,Object? damageTypeId = null,Object? location = null,Object? description = freezed,Object? address = null,Object? createdAt = null,Object? updatedAt = null,Object? city = freezed,Object? damageType = null,Object? severity = null,Object? status = null,Object? user = freezed,Object? updates = null,Object? images = null,Object? flags = null,}) {
   return _then(_Report(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -237,7 +251,8 @@ as DateTime,city: freezed == city ? _self.city : city // ignore: cast_nullable_t
 as String?,damageType: null == damageType ? _self.damageType : damageType // ignore: cast_nullable_to_non_nullable
 as DamageType,severity: null == severity ? _self.severity : severity // ignore: cast_nullable_to_non_nullable
 as Severity,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as Status,updates: null == updates ? _self._updates : updates // ignore: cast_nullable_to_non_nullable
+as Status,user: freezed == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
+as ReportUser?,updates: null == updates ? _self._updates : updates // ignore: cast_nullable_to_non_nullable
 as List<ReportUpdate>,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
 as List<ReportImage>,flags: null == flags ? _self._flags : flags // ignore: cast_nullable_to_non_nullable
 as List<ReportFlag>,
@@ -280,7 +295,158 @@ $StatusCopyWith<$Res> get status {
   return $StatusCopyWith<$Res>(_self.status, (value) {
     return _then(_self.copyWith(status: value));
   });
+}/// Create a copy of Report
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ReportUserCopyWith<$Res>? get user {
+    if (_self.user == null) {
+    return null;
+  }
+
+  return $ReportUserCopyWith<$Res>(_self.user!, (value) {
+    return _then(_self.copyWith(user: value));
+  });
 }
+}
+
+
+/// @nodoc
+mixin _$ReportUser {
+
+ int get id; String get name; int get reputation;
+/// Create a copy of ReportUser
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ReportUserCopyWith<ReportUser> get copyWith => _$ReportUserCopyWithImpl<ReportUser>(this as ReportUser, _$identity);
+
+  /// Serializes this ReportUser to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReportUser&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.reputation, reputation) || other.reputation == reputation));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,reputation);
+
+@override
+String toString() {
+  return 'ReportUser(id: $id, name: $name, reputation: $reputation)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ReportUserCopyWith<$Res>  {
+  factory $ReportUserCopyWith(ReportUser value, $Res Function(ReportUser) _then) = _$ReportUserCopyWithImpl;
+@useResult
+$Res call({
+ int id, String name, int reputation
+});
+
+
+
+
+}
+/// @nodoc
+class _$ReportUserCopyWithImpl<$Res>
+    implements $ReportUserCopyWith<$Res> {
+  _$ReportUserCopyWithImpl(this._self, this._then);
+
+  final ReportUser _self;
+  final $Res Function(ReportUser) _then;
+
+/// Create a copy of ReportUser
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? reputation = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,reputation: null == reputation ? _self.reputation : reputation // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+}
+
+
+/// @nodoc
+@JsonSerializable()
+
+class _ReportUser implements ReportUser {
+  const _ReportUser({required this.id, required this.name, required this.reputation});
+  factory _ReportUser.fromJson(Map<String, dynamic> json) => _$ReportUserFromJson(json);
+
+@override final  int id;
+@override final  String name;
+@override final  int reputation;
+
+/// Create a copy of ReportUser
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ReportUserCopyWith<_ReportUser> get copyWith => __$ReportUserCopyWithImpl<_ReportUser>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ReportUserToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReportUser&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.reputation, reputation) || other.reputation == reputation));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,reputation);
+
+@override
+String toString() {
+  return 'ReportUser(id: $id, name: $name, reputation: $reputation)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ReportUserCopyWith<$Res> implements $ReportUserCopyWith<$Res> {
+  factory _$ReportUserCopyWith(_ReportUser value, $Res Function(_ReportUser) _then) = __$ReportUserCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, String name, int reputation
+});
+
+
+
+
+}
+/// @nodoc
+class __$ReportUserCopyWithImpl<$Res>
+    implements _$ReportUserCopyWith<$Res> {
+  __$ReportUserCopyWithImpl(this._self, this._then);
+
+  final _ReportUser _self;
+  final $Res Function(_ReportUser) _then;
+
+/// Create a copy of ReportUser
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? reputation = null,}) {
+  return _then(_ReportUser(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,reputation: null == reputation ? _self.reputation : reputation // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
 }
 
 

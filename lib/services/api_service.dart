@@ -102,7 +102,8 @@ class ApiService {
       if (response.statusCode == 200) {
         List<dynamic> data = response.data is List
             ? response.data
-            : response.data['data']; // Adjust based on your API
+            : response.data['data'];
+        print("usr ${data.first['user']}");
         return data.map((json) => Report.fromJson(json)).toList();
       } else {
         throw Exception('Failed to load reports api : ${response.statusCode}');

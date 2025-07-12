@@ -18,6 +18,7 @@ class LocalReports extends Table {
   TextColumn get city => text().nullable()();
   TextColumn get updates => text().withDefault(const Constant('[]'))();
   TextColumn get flags => text().withDefault(const Constant('[]'))();
+  TextColumn get user => text().nullable()();
 
   // Denormalized data for easier display from cache
   TextColumn get damageTypeName => text().named('damage_type_name')();
@@ -41,6 +42,8 @@ class MyLocalReports extends Table {
   DateTimeColumn get createdAt => dateTime().named('created_at')();
   DateTimeColumn get updatedAt => dateTime().named('updated_at')();
   TextColumn get city => text().nullable()();
+  TextColumn get updates => text().withDefault(const Constant('[]'))();
+  TextColumn get flags => text().withDefault(const Constant('[]'))();
 
   // Denormalized data for easier display from cache
   TextColumn get damageTypeName => text().named('damage_type_name')();

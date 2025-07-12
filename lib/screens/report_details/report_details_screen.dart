@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_application_1/models/report_model.dart' as app_models;
 import 'package:flutter_application_1/screens/report_details/widgets/report_flag_card.dart';
+import 'package:flutter_application_1/screens/report_details/widgets/report_owner_card.dart';
 import 'package:flutter_application_1/screens/report_details/widgets/report_update_tile.dart';
 import 'package:flutter_application_1/widgets/authenticated_image.dart';
 import 'package:flutter_application_1/screens/history/widgets/severity_badge.dart';
@@ -17,6 +18,16 @@ class ReportDetailsScreen extends StatefulWidget {
 
   @override
   State<ReportDetailsScreen> createState() => _ReportDetailsScreenState();
+}
+
+Widget _buildUserSection(BuildContext context, app_models.Report report) {
+  final theme = Theme.of(context);
+
+  if (report.user == null) {
+    return const SizedBox.shrink();
+  }
+
+  return ReportOwnerCard(owner: report.user!);
 }
 
 // Create a new builder method for the updates section
@@ -61,7 +72,7 @@ Widget _buildUpdatesSection(BuildContext context, app_models.Report report) {
 
 Widget _buildFlagsSection(BuildContext context, app_models.Report report) {
   final theme = Theme.of(context);
-
+  print("flags section : ${report.flags.length}");
   // --- CONDITIONAL RENDERING ---
   // If there are no flags, return an empty widget to hide the section.
   if (report.flags.isEmpty) {
@@ -282,6 +293,7 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  _buildUserSection(context, report),
                   const SizedBox(height: 16),
                   _buildDetailRow(
                     context,

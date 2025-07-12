@@ -21,6 +21,9 @@ _Report _$ReportFromJson(Map<String, dynamic> json) => _Report(
   damageType: DamageType.fromJson(json['damage_type'] as Map<String, dynamic>),
   severity: Severity.fromJson(json['severity'] as Map<String, dynamic>),
   status: Status.fromJson(json['status'] as Map<String, dynamic>),
+  user: json['user'] == null
+      ? null
+      : ReportUser.fromJson(json['user'] as Map<String, dynamic>),
   updates:
       (json['updates'] as List<dynamic>?)
           ?.map((e) => ReportUpdate.fromJson(e as Map<String, dynamic>))
@@ -53,10 +56,24 @@ Map<String, dynamic> _$ReportToJson(_Report instance) => <String, dynamic>{
   'damage_type': instance.damageType,
   'severity': instance.severity,
   'status': instance.status,
+  'user': instance.user,
   'updates': instance.updates,
   'images': instance.images,
   'flags': instance.flags,
 };
+
+_ReportUser _$ReportUserFromJson(Map<String, dynamic> json) => _ReportUser(
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  reputation: (json['reputation'] as num).toInt(),
+);
+
+Map<String, dynamic> _$ReportUserToJson(_ReportUser instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'reputation': instance.reputation,
+    };
 
 _ReportLocation _$ReportLocationFromJson(Map<String, dynamic> json) =>
     _ReportLocation(

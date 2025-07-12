@@ -157,6 +157,15 @@ class $LocalReportsTable extends LocalReports
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
   );
+  static const VerificationMeta _userMeta = const VerificationMeta('user');
+  @override
+  late final GeneratedColumn<String> user = GeneratedColumn<String>(
+    'user',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _damageTypeNameMeta = const VerificationMeta(
     'damageTypeName',
   );
@@ -206,6 +215,7 @@ class $LocalReportsTable extends LocalReports
     city,
     updates,
     flags,
+    user,
     damageTypeName,
     severityName,
     statusName,
@@ -329,6 +339,12 @@ class $LocalReportsTable extends LocalReports
         flags.isAcceptableOrUnknown(data['flags']!, _flagsMeta),
       );
     }
+    if (data.containsKey('user')) {
+      context.handle(
+        _userMeta,
+        user.isAcceptableOrUnknown(data['user']!, _userMeta),
+      );
+    }
     if (data.containsKey('damage_type_name')) {
       context.handle(
         _damageTypeNameMeta,
@@ -424,6 +440,10 @@ class $LocalReportsTable extends LocalReports
         DriftSqlType.string,
         data['${effectivePrefix}flags'],
       )!,
+      user: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user'],
+      ),
       damageTypeName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}damage_type_name'],
@@ -460,6 +480,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
   final String? city;
   final String updates;
   final String flags;
+  final String? user;
   final String damageTypeName;
   final String severityName;
   final String statusName;
@@ -478,6 +499,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
     this.city,
     required this.updates,
     required this.flags,
+    this.user,
     required this.damageTypeName,
     required this.severityName,
     required this.statusName,
@@ -503,6 +525,9 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
     }
     map['updates'] = Variable<String>(updates);
     map['flags'] = Variable<String>(flags);
+    if (!nullToAbsent || user != null) {
+      map['user'] = Variable<String>(user);
+    }
     map['damage_type_name'] = Variable<String>(damageTypeName);
     map['severity_name'] = Variable<String>(severityName);
     map['status_name'] = Variable<String>(statusName);
@@ -527,6 +552,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
       city: city == null && nullToAbsent ? const Value.absent() : Value(city),
       updates: Value(updates),
       flags: Value(flags),
+      user: user == null && nullToAbsent ? const Value.absent() : Value(user),
       damageTypeName: Value(damageTypeName),
       severityName: Value(severityName),
       statusName: Value(statusName),
@@ -553,6 +579,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
       city: serializer.fromJson<String?>(json['city']),
       updates: serializer.fromJson<String>(json['updates']),
       flags: serializer.fromJson<String>(json['flags']),
+      user: serializer.fromJson<String?>(json['user']),
       damageTypeName: serializer.fromJson<String>(json['damageTypeName']),
       severityName: serializer.fromJson<String>(json['severityName']),
       statusName: serializer.fromJson<String>(json['statusName']),
@@ -576,6 +603,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
       'city': serializer.toJson<String?>(city),
       'updates': serializer.toJson<String>(updates),
       'flags': serializer.toJson<String>(flags),
+      'user': serializer.toJson<String?>(user),
       'damageTypeName': serializer.toJson<String>(damageTypeName),
       'severityName': serializer.toJson<String>(severityName),
       'statusName': serializer.toJson<String>(statusName),
@@ -597,6 +625,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
     Value<String?> city = const Value.absent(),
     String? updates,
     String? flags,
+    Value<String?> user = const Value.absent(),
     String? damageTypeName,
     String? severityName,
     String? statusName,
@@ -615,6 +644,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
     city: city.present ? city.value : this.city,
     updates: updates ?? this.updates,
     flags: flags ?? this.flags,
+    user: user.present ? user.value : this.user,
     damageTypeName: damageTypeName ?? this.damageTypeName,
     severityName: severityName ?? this.severityName,
     statusName: statusName ?? this.statusName,
@@ -641,6 +671,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
       city: data.city.present ? data.city.value : this.city,
       updates: data.updates.present ? data.updates.value : this.updates,
       flags: data.flags.present ? data.flags.value : this.flags,
+      user: data.user.present ? data.user.value : this.user,
       damageTypeName: data.damageTypeName.present
           ? data.damageTypeName.value
           : this.damageTypeName,
@@ -670,6 +701,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
           ..write('city: $city, ')
           ..write('updates: $updates, ')
           ..write('flags: $flags, ')
+          ..write('user: $user, ')
           ..write('damageTypeName: $damageTypeName, ')
           ..write('severityName: $severityName, ')
           ..write('statusName: $statusName')
@@ -693,6 +725,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
     city,
     updates,
     flags,
+    user,
     damageTypeName,
     severityName,
     statusName,
@@ -715,6 +748,7 @@ class LocalReport extends DataClass implements Insertable<LocalReport> {
           other.city == this.city &&
           other.updates == this.updates &&
           other.flags == this.flags &&
+          other.user == this.user &&
           other.damageTypeName == this.damageTypeName &&
           other.severityName == this.severityName &&
           other.statusName == this.statusName);
@@ -735,6 +769,7 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
   final Value<String?> city;
   final Value<String> updates;
   final Value<String> flags;
+  final Value<String?> user;
   final Value<String> damageTypeName;
   final Value<String> severityName;
   final Value<String> statusName;
@@ -754,6 +789,7 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
     this.city = const Value.absent(),
     this.updates = const Value.absent(),
     this.flags = const Value.absent(),
+    this.user = const Value.absent(),
     this.damageTypeName = const Value.absent(),
     this.severityName = const Value.absent(),
     this.statusName = const Value.absent(),
@@ -774,6 +810,7 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
     this.city = const Value.absent(),
     this.updates = const Value.absent(),
     this.flags = const Value.absent(),
+    this.user = const Value.absent(),
     required String damageTypeName,
     required String severityName,
     required String statusName,
@@ -806,6 +843,7 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
     Expression<String>? city,
     Expression<String>? updates,
     Expression<String>? flags,
+    Expression<String>? user,
     Expression<String>? damageTypeName,
     Expression<String>? severityName,
     Expression<String>? statusName,
@@ -826,6 +864,7 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
       if (city != null) 'city': city,
       if (updates != null) 'updates': updates,
       if (flags != null) 'flags': flags,
+      if (user != null) 'user': user,
       if (damageTypeName != null) 'damage_type_name': damageTypeName,
       if (severityName != null) 'severity_name': severityName,
       if (statusName != null) 'status_name': statusName,
@@ -848,6 +887,7 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
     Value<String?>? city,
     Value<String>? updates,
     Value<String>? flags,
+    Value<String?>? user,
     Value<String>? damageTypeName,
     Value<String>? severityName,
     Value<String>? statusName,
@@ -868,6 +908,7 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
       city: city ?? this.city,
       updates: updates ?? this.updates,
       flags: flags ?? this.flags,
+      user: user ?? this.user,
       damageTypeName: damageTypeName ?? this.damageTypeName,
       severityName: severityName ?? this.severityName,
       statusName: statusName ?? this.statusName,
@@ -920,6 +961,9 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
     if (flags.present) {
       map['flags'] = Variable<String>(flags.value);
     }
+    if (user.present) {
+      map['user'] = Variable<String>(user.value);
+    }
     if (damageTypeName.present) {
       map['damage_type_name'] = Variable<String>(damageTypeName.value);
     }
@@ -952,6 +996,7 @@ class LocalReportsCompanion extends UpdateCompanion<LocalReport> {
           ..write('city: $city, ')
           ..write('updates: $updates, ')
           ..write('flags: $flags, ')
+          ..write('user: $user, ')
           ..write('damageTypeName: $damageTypeName, ')
           ..write('severityName: $severityName, ')
           ..write('statusName: $statusName, ')
@@ -1715,6 +1760,28 @@ class $MyLocalReportsTable extends MyLocalReports
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _updatesMeta = const VerificationMeta(
+    'updates',
+  );
+  @override
+  late final GeneratedColumn<String> updates = GeneratedColumn<String>(
+    'updates',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
+  static const VerificationMeta _flagsMeta = const VerificationMeta('flags');
+  @override
+  late final GeneratedColumn<String> flags = GeneratedColumn<String>(
+    'flags',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('[]'),
+  );
   static const VerificationMeta _damageTypeNameMeta = const VerificationMeta(
     'damageTypeName',
   );
@@ -1762,6 +1829,8 @@ class $MyLocalReportsTable extends MyLocalReports
     createdAt,
     updatedAt,
     city,
+    updates,
+    flags,
     damageTypeName,
     severityName,
     statusName,
@@ -1873,6 +1942,18 @@ class $MyLocalReportsTable extends MyLocalReports
         city.isAcceptableOrUnknown(data['city']!, _cityMeta),
       );
     }
+    if (data.containsKey('updates')) {
+      context.handle(
+        _updatesMeta,
+        updates.isAcceptableOrUnknown(data['updates']!, _updatesMeta),
+      );
+    }
+    if (data.containsKey('flags')) {
+      context.handle(
+        _flagsMeta,
+        flags.isAcceptableOrUnknown(data['flags']!, _flagsMeta),
+      );
+    }
     if (data.containsKey('damage_type_name')) {
       context.handle(
         _damageTypeNameMeta,
@@ -1960,6 +2041,14 @@ class $MyLocalReportsTable extends MyLocalReports
         DriftSqlType.string,
         data['${effectivePrefix}city'],
       ),
+      updates: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}updates'],
+      )!,
+      flags: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}flags'],
+      )!,
       damageTypeName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}damage_type_name'],
@@ -1994,6 +2083,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final String? city;
+  final String updates;
+  final String flags;
   final String damageTypeName;
   final String severityName;
   final String statusName;
@@ -2010,6 +2101,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
     required this.createdAt,
     required this.updatedAt,
     this.city,
+    required this.updates,
+    required this.flags,
     required this.damageTypeName,
     required this.severityName,
     required this.statusName,
@@ -2033,6 +2126,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
     if (!nullToAbsent || city != null) {
       map['city'] = Variable<String>(city);
     }
+    map['updates'] = Variable<String>(updates);
+    map['flags'] = Variable<String>(flags);
     map['damage_type_name'] = Variable<String>(damageTypeName);
     map['severity_name'] = Variable<String>(severityName);
     map['status_name'] = Variable<String>(statusName);
@@ -2055,6 +2150,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
       city: city == null && nullToAbsent ? const Value.absent() : Value(city),
+      updates: Value(updates),
+      flags: Value(flags),
       damageTypeName: Value(damageTypeName),
       severityName: Value(severityName),
       statusName: Value(statusName),
@@ -2079,6 +2176,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       city: serializer.fromJson<String?>(json['city']),
+      updates: serializer.fromJson<String>(json['updates']),
+      flags: serializer.fromJson<String>(json['flags']),
       damageTypeName: serializer.fromJson<String>(json['damageTypeName']),
       severityName: serializer.fromJson<String>(json['severityName']),
       statusName: serializer.fromJson<String>(json['statusName']),
@@ -2100,6 +2199,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'city': serializer.toJson<String?>(city),
+      'updates': serializer.toJson<String>(updates),
+      'flags': serializer.toJson<String>(flags),
       'damageTypeName': serializer.toJson<String>(damageTypeName),
       'severityName': serializer.toJson<String>(severityName),
       'statusName': serializer.toJson<String>(statusName),
@@ -2119,6 +2220,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
     DateTime? createdAt,
     DateTime? updatedAt,
     Value<String?> city = const Value.absent(),
+    String? updates,
+    String? flags,
     String? damageTypeName,
     String? severityName,
     String? statusName,
@@ -2135,6 +2238,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     city: city.present ? city.value : this.city,
+    updates: updates ?? this.updates,
+    flags: flags ?? this.flags,
     damageTypeName: damageTypeName ?? this.damageTypeName,
     severityName: severityName ?? this.severityName,
     statusName: statusName ?? this.statusName,
@@ -2159,6 +2264,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       city: data.city.present ? data.city.value : this.city,
+      updates: data.updates.present ? data.updates.value : this.updates,
+      flags: data.flags.present ? data.flags.value : this.flags,
       damageTypeName: data.damageTypeName.present
           ? data.damageTypeName.value
           : this.damageTypeName,
@@ -2186,6 +2293,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('city: $city, ')
+          ..write('updates: $updates, ')
+          ..write('flags: $flags, ')
           ..write('damageTypeName: $damageTypeName, ')
           ..write('severityName: $severityName, ')
           ..write('statusName: $statusName')
@@ -2207,6 +2316,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
     createdAt,
     updatedAt,
     city,
+    updates,
+    flags,
     damageTypeName,
     severityName,
     statusName,
@@ -2227,6 +2338,8 @@ class MyLocalReport extends DataClass implements Insertable<MyLocalReport> {
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.city == this.city &&
+          other.updates == this.updates &&
+          other.flags == this.flags &&
           other.damageTypeName == this.damageTypeName &&
           other.severityName == this.severityName &&
           other.statusName == this.statusName);
@@ -2245,6 +2358,8 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<String?> city;
+  final Value<String> updates;
+  final Value<String> flags;
   final Value<String> damageTypeName;
   final Value<String> severityName;
   final Value<String> statusName;
@@ -2262,6 +2377,8 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.city = const Value.absent(),
+    this.updates = const Value.absent(),
+    this.flags = const Value.absent(),
     this.damageTypeName = const Value.absent(),
     this.severityName = const Value.absent(),
     this.statusName = const Value.absent(),
@@ -2280,6 +2397,8 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.city = const Value.absent(),
+    this.updates = const Value.absent(),
+    this.flags = const Value.absent(),
     required String damageTypeName,
     required String severityName,
     required String statusName,
@@ -2310,6 +2429,8 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<String>? city,
+    Expression<String>? updates,
+    Expression<String>? flags,
     Expression<String>? damageTypeName,
     Expression<String>? severityName,
     Expression<String>? statusName,
@@ -2328,6 +2449,8 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (city != null) 'city': city,
+      if (updates != null) 'updates': updates,
+      if (flags != null) 'flags': flags,
       if (damageTypeName != null) 'damage_type_name': damageTypeName,
       if (severityName != null) 'severity_name': severityName,
       if (statusName != null) 'status_name': statusName,
@@ -2348,6 +2471,8 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<String?>? city,
+    Value<String>? updates,
+    Value<String>? flags,
     Value<String>? damageTypeName,
     Value<String>? severityName,
     Value<String>? statusName,
@@ -2366,6 +2491,8 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       city: city ?? this.city,
+      updates: updates ?? this.updates,
+      flags: flags ?? this.flags,
       damageTypeName: damageTypeName ?? this.damageTypeName,
       severityName: severityName ?? this.severityName,
       statusName: statusName ?? this.statusName,
@@ -2412,6 +2539,12 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
     if (city.present) {
       map['city'] = Variable<String>(city.value);
     }
+    if (updates.present) {
+      map['updates'] = Variable<String>(updates.value);
+    }
+    if (flags.present) {
+      map['flags'] = Variable<String>(flags.value);
+    }
     if (damageTypeName.present) {
       map['damage_type_name'] = Variable<String>(damageTypeName.value);
     }
@@ -2442,6 +2575,8 @@ class MyLocalReportsCompanion extends UpdateCompanion<MyLocalReport> {
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('city: $city, ')
+          ..write('updates: $updates, ')
+          ..write('flags: $flags, ')
           ..write('damageTypeName: $damageTypeName, ')
           ..write('severityName: $severityName, ')
           ..write('statusName: $statusName, ')
@@ -3606,6 +3741,7 @@ typedef $$LocalReportsTableCreateCompanionBuilder =
       Value<String?> city,
       Value<String> updates,
       Value<String> flags,
+      Value<String?> user,
       required String damageTypeName,
       required String severityName,
       required String statusName,
@@ -3627,6 +3763,7 @@ typedef $$LocalReportsTableUpdateCompanionBuilder =
       Value<String?> city,
       Value<String> updates,
       Value<String> flags,
+      Value<String?> user,
       Value<String> damageTypeName,
       Value<String> severityName,
       Value<String> statusName,
@@ -3738,6 +3875,11 @@ class $$LocalReportsTableFilterComposer
 
   ColumnFilters<String> get flags => $composableBuilder(
     column: $table.flags,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get user => $composableBuilder(
+    column: $table.user,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3861,6 +4003,11 @@ class $$LocalReportsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get user => $composableBuilder(
+    column: $table.user,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get damageTypeName => $composableBuilder(
     column: $table.damageTypeName,
     builder: (column) => ColumnOrderings(column),
@@ -3933,6 +4080,9 @@ class $$LocalReportsTableAnnotationComposer
 
   GeneratedColumn<String> get flags =>
       $composableBuilder(column: $table.flags, builder: (column) => column);
+
+  GeneratedColumn<String> get user =>
+      $composableBuilder(column: $table.user, builder: (column) => column);
 
   GeneratedColumn<String> get damageTypeName => $composableBuilder(
     column: $table.damageTypeName,
@@ -4018,6 +4168,7 @@ class $$LocalReportsTableTableManager
                 Value<String?> city = const Value.absent(),
                 Value<String> updates = const Value.absent(),
                 Value<String> flags = const Value.absent(),
+                Value<String?> user = const Value.absent(),
                 Value<String> damageTypeName = const Value.absent(),
                 Value<String> severityName = const Value.absent(),
                 Value<String> statusName = const Value.absent(),
@@ -4037,6 +4188,7 @@ class $$LocalReportsTableTableManager
                 city: city,
                 updates: updates,
                 flags: flags,
+                user: user,
                 damageTypeName: damageTypeName,
                 severityName: severityName,
                 statusName: statusName,
@@ -4058,6 +4210,7 @@ class $$LocalReportsTableTableManager
                 Value<String?> city = const Value.absent(),
                 Value<String> updates = const Value.absent(),
                 Value<String> flags = const Value.absent(),
+                Value<String?> user = const Value.absent(),
                 required String damageTypeName,
                 required String severityName,
                 required String statusName,
@@ -4077,6 +4230,7 @@ class $$LocalReportsTableTableManager
                 city: city,
                 updates: updates,
                 flags: flags,
+                user: user,
                 damageTypeName: damageTypeName,
                 severityName: severityName,
                 statusName: statusName,
@@ -4699,6 +4853,8 @@ typedef $$MyLocalReportsTableCreateCompanionBuilder =
       required DateTime createdAt,
       required DateTime updatedAt,
       Value<String?> city,
+      Value<String> updates,
+      Value<String> flags,
       required String damageTypeName,
       required String severityName,
       required String statusName,
@@ -4718,6 +4874,8 @@ typedef $$MyLocalReportsTableUpdateCompanionBuilder =
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<String?> city,
+      Value<String> updates,
+      Value<String> flags,
       Value<String> damageTypeName,
       Value<String> severityName,
       Value<String> statusName,
@@ -4790,6 +4948,16 @@ class $$MyLocalReportsTableFilterComposer
 
   ColumnFilters<String> get city => $composableBuilder(
     column: $table.city,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get updates => $composableBuilder(
+    column: $table.updates,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get flags => $composableBuilder(
+    column: $table.flags,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4878,6 +5046,16 @@ class $$MyLocalReportsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get updates => $composableBuilder(
+    column: $table.updates,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get flags => $composableBuilder(
+    column: $table.flags,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get damageTypeName => $composableBuilder(
     column: $table.damageTypeName,
     builder: (column) => ColumnOrderings(column),
@@ -4945,6 +5123,12 @@ class $$MyLocalReportsTableAnnotationComposer
   GeneratedColumn<String> get city =>
       $composableBuilder(column: $table.city, builder: (column) => column);
 
+  GeneratedColumn<String> get updates =>
+      $composableBuilder(column: $table.updates, builder: (column) => column);
+
+  GeneratedColumn<String> get flags =>
+      $composableBuilder(column: $table.flags, builder: (column) => column);
+
   GeneratedColumn<String> get damageTypeName => $composableBuilder(
     column: $table.damageTypeName,
     builder: (column) => column,
@@ -5006,6 +5190,8 @@ class $$MyLocalReportsTableTableManager
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<String?> city = const Value.absent(),
+                Value<String> updates = const Value.absent(),
+                Value<String> flags = const Value.absent(),
                 Value<String> damageTypeName = const Value.absent(),
                 Value<String> severityName = const Value.absent(),
                 Value<String> statusName = const Value.absent(),
@@ -5023,6 +5209,8 @@ class $$MyLocalReportsTableTableManager
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 city: city,
+                updates: updates,
+                flags: flags,
                 damageTypeName: damageTypeName,
                 severityName: severityName,
                 statusName: statusName,
@@ -5042,6 +5230,8 @@ class $$MyLocalReportsTableTableManager
                 required DateTime createdAt,
                 required DateTime updatedAt,
                 Value<String?> city = const Value.absent(),
+                Value<String> updates = const Value.absent(),
+                Value<String> flags = const Value.absent(),
                 required String damageTypeName,
                 required String severityName,
                 required String statusName,
@@ -5059,6 +5249,8 @@ class $$MyLocalReportsTableTableManager
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 city: city,
+                updates: updates,
+                flags: flags,
                 damageTypeName: damageTypeName,
                 severityName: severityName,
                 statusName: statusName,

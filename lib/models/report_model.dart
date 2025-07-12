@@ -21,12 +21,26 @@ sealed class Report with _$Report {
     @JsonKey(name: 'damage_type') required DamageType damageType,
     required Severity severity,
     required Status status,
+    ReportUser? user,
+
     @Default([]) List<ReportUpdate> updates,
     @Default([]) List<ReportImage> images,
     @Default([]) List<ReportFlag> flags,
   }) = _Report;
 
   factory Report.fromJson(Map<String, dynamic> json) => _$ReportFromJson(json);
+}
+
+@freezed
+sealed class ReportUser with _$ReportUser {
+  const factory ReportUser({
+    required int id,
+    required String name,
+    required int reputation,
+  }) = _ReportUser;
+
+  factory ReportUser.fromJson(Map<String, dynamic> json) =>
+      _$ReportUserFromJson(json);
 }
 
 @freezed

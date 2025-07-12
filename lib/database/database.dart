@@ -28,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 11; // Increment this when you change tables
+  int get schemaVersion => 13; // Increment this when you change tables
 
   @override
   MigrationStrategy get migration {
@@ -166,6 +166,8 @@ class AppDatabase extends _$AppDatabase {
             id: dbReport.statusId,
             name: dbReport.statusName,
           ),
+          updates: _reportUpdatesFromJson(dbReport.updates),
+          flags: _reportFlagsFromJson(dbReport.flags),
           images: dbImages
               .map(
                 (img) => app_models.ReportImage(
@@ -225,6 +227,9 @@ class AppDatabase extends _$AppDatabase {
           ),
           updates: _reportUpdatesFromJson(dbReport.updates),
           flags: _reportFlagsFromJson(dbReport.flags),
+          user: dbReport.user != null
+              ? app_models.ReportUser.fromJson(jsonDecode(dbReport.user!))
+              : null,
           images: dbImages
               .map(
                 (img) => app_models.ReportImage(
@@ -281,6 +286,9 @@ class AppDatabase extends _$AppDatabase {
             statusName: apiReport.status.name,
             updates: Value(jsonEncode(apiReport.updates)),
             flags: Value(jsonEncode(apiReport.flags)),
+            user: Value(
+              apiReport.user != null ? jsonEncode(apiReport.user) : null,
+            ),
           ),
           mode: InsertMode.insertOrReplace,
         );
@@ -306,24 +314,6 @@ class AppDatabase extends _$AppDatabase {
       batch.deleteAll(myLocalReports);
 
       for (final apiReport in apiReports) {
-        final tem = {
-          "id": apiReport.id,
-          "userId": apiReport.userId,
-          "severityId": apiReport.severityId,
-          "statusId": apiReport.statusId,
-          "damageTypeId": apiReport.damageTypeId,
-          "latitude": apiReport.location.coordinates[1], // lat
-          "longitude": apiReport.location.coordinates[0], // lng
-          "description": apiReport.description,
-          "address": apiReport.address,
-          "createdAt": apiReport.createdAt,
-          "updatedAt": apiReport.updatedAt,
-          "city": apiReport.city,
-          "damageTypeName": apiReport.damageType.name,
-          "severityName": apiReport.severity.name,
-          "statusName": apiReport.status.name,
-        };
-        print(tem);
         batch.insert(
           myLocalReports,
           MyLocalReportsCompanion.insert(
@@ -342,6 +332,8 @@ class AppDatabase extends _$AppDatabase {
             damageTypeName: apiReport.damageType.name,
             severityName: apiReport.severity.name,
             statusName: apiReport.status.name,
+            updates: Value(jsonEncode(apiReport.updates)),
+            flags: Value(jsonEncode(apiReport.flags)),
           ),
           mode: InsertMode.insertOrReplace,
         );
