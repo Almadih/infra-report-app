@@ -1,5 +1,6 @@
 // lib/main.dart
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,9 +11,11 @@ import 'package:flutter_application_1/providers/connectivity_provider.dart';
 import 'package:flutter_application_1/repositories/report_repository.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
 import 'package:flutter_application_1/services/notification_service.dart';
+import 'package:flutter_application_1/utils/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_1/app.dart'; // Import provider
-import 'package:flutter_application_1/screens/onboarding/onboarding_screen.dart'; // Import onboarding screen
+import 'package:flutter_application_1/screens/onboarding/onboarding_screen.dart';
+import 'package:json_theme/json_theme.dart'; // Import onboarding screen
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -35,17 +38,23 @@ void main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
+
+  final theme = await getTheme();
   // Set the background messaging handler
 
   runApp(
     ProviderScope(
-      child: AppInitializer(), // Use a ConsumerWidget to decide initial route
+      child: AppInitializer(
+        theme: theme,
+      ), // Use a ConsumerWidget to decide initial route
     ),
   );
 }
 
 class AppInitializer extends ConsumerStatefulWidget {
-  const AppInitializer({super.key});
+  final dynamic theme;
+
+  const AppInitializer({super.key, required this.theme});
   @override
   ConsumerState<AppInitializer> createState() => _AppInitializerState();
 }
@@ -53,18 +62,7 @@ class AppInitializer extends ConsumerStatefulWidget {
 class _AppInitializerState extends ConsumerState<AppInitializer> {
   init() {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    // Use the 'ref' from the ConsumerState to read providers.
     ref.read(notificationServiceProvider).initialize(ref);
-    // Listen for connectivity changes to process the offline queue.
-    // ref.listen<AsyncValue<bool>>(appConnectivityProvider, (previous, next) {
-    //   final isOnline = next.value ?? false;
-    //   final wasOnline = previous?.value ?? false;
-
-    //   // Trigger queue processing when transitioning from offline to online.
-    //   if (isOnline && !wasOnline) {
-    //     ref.read(reportRepositoryProvider).processPendingQueue();
-    //   }
-    // });
   }
 
   @override
@@ -75,6 +73,7 @@ class _AppInitializerState extends ConsumerState<AppInitializer> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = widget.theme;
     final authState = ref.watch(authProvider);
     ref.listen<AsyncValue<bool>>(appConnectivityProvider, (previous, next) {
       final isOnline = next.value ?? false;
@@ -97,9 +96,9 @@ class _AppInitializerState extends ConsumerState<AppInitializer> {
           // Check the type of the state
           switch (state) {
             case Authenticated _:
-              return MyApp();
+              return MyApp(theme: theme);
             case Unauthenticated _:
-              return OnboardingScreen();
+              return OnboardingScreen(theme: theme);
           }
           return null;
         },

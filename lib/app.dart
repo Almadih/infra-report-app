@@ -25,7 +25,8 @@ final MaterialColor primarySwatch = MaterialColor(0xFF34A85A, <int, Color>{
 });
 
 class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+  final ThemeData theme;
+  const MyApp({super.key, required this.theme});
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
@@ -42,16 +43,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'Report Map App',
-      theme: ThemeData(
-        primarySwatch: primarySwatch,
-        // useMaterial3: true,
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: primarySwatch)
-            .copyWith(
-              secondary: Color(
-                0xffFF5722,
-              ), // You can customize secondary if needed
-            ),
-      ),
+      theme: theme,
       home: Scaffold(
         // The body will now be one of the _widgetOptions directly.
         // extendBody: true allows the body (e.g., HomeScreen's map)

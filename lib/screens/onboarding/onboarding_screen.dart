@@ -8,7 +8,8 @@ import 'package:flutter_application_1/app.dart'; // To navigate to MyApp
 import 'package:scaffold_gradient_background/scaffold_gradient_background.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
-  const OnboardingScreen({super.key});
+  final ThemeData theme;
+  const OnboardingScreen({super.key, required this.theme});
 
   @override
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -39,6 +40,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ),
   ];
 
+  get theme => null;
+
   void _getStarted() async {
     setState(() {
       _isAuthenticating = true;
@@ -67,9 +70,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           _isAuthenticating = false;
         });
 
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (context) => MyApp()));
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => MyApp(theme: theme)),
+        );
       }
     }
   }
