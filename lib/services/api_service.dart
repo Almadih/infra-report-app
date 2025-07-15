@@ -13,6 +13,30 @@ class ApiService {
   final Dio _dio;
   ApiService(this._dio);
 
+  Future<User> updateUserProfile({
+    required String name,
+    required bool isPublic,
+  }) async {
+    print("API CALL: Updating user profile...");
+    try {
+      // This would typically be a PUT or PATCH request.
+      final response = await _dio.put(
+        '/api/user/profile', // Your actual endpoint
+        data: {'name': name, 'is_public': isPublic},
+      );
+
+      if (response.statusCode == 200 && response.data['user'] != null) {
+        print("API CALL: Profile updated successfully.");
+        // Return the updated user object from the response
+        return User.fromJson(response.data['user']);
+      } else {
+        throw Exception('Server returned an error while updating profile.');
+      }
+    } on DioException catch (e) {
+      throw Exception('Failed to update profile: ${e.message}');
+    }
+  }
+
   Future<void> saveFcmToken(String fcmToken) async {
     try {
       // Typically, this would be a POST or PUT request.

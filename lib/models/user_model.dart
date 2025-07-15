@@ -9,7 +9,8 @@ sealed class User with _$User {
     required int id,
     required String name,
     required String email,
-    int? reputation,
+    required int reputation,
+    @JsonKey(name: 'show_info_to_public') required bool isPublic,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

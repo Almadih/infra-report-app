@@ -7,10 +7,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'notification_provider.g.dart';
 
 @riverpod
-Future<List<AppNotification>> notifications(ref) async {
+Stream<List<AppNotification>> notifications(ref) {
   final notificationsRepository = ref.watch(notificationsRepositoryProvider);
   notificationsRepository.fetchNotifications();
-  return notificationsRepository.watchNotifications().first;
+  return notificationsRepository.watchNotifications();
 }
 
 @riverpod

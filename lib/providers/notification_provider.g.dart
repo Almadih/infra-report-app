@@ -6,12 +6,12 @@ part of 'notification_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notificationsHash() => r'36400dcc2c18c34dfb96ee4cf6044e730df29874';
+String _$notificationsHash() => r'ec6afbcf8de60c020abaa82056e86de812662852';
 
 /// See also [notifications].
 @ProviderFor(notifications)
 final notificationsProvider =
-    AutoDisposeFutureProvider<List<AppNotification>>.internal(
+    AutoDisposeStreamProvider<List<AppNotification>>.internal(
       notifications,
       name: r'notificationsProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -23,7 +23,7 @@ final notificationsProvider =
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef NotificationsRef = AutoDisposeFutureProviderRef<List<AppNotification>>;
+typedef NotificationsRef = AutoDisposeStreamProviderRef<List<AppNotification>>;
 String _$unreadNotificationsCountHash() =>
     r'4494ff216de7275ece285b2b2af68e7d99ac4d46';
 

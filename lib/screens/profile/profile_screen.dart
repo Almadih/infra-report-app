@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/auth_state.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
+import 'package:flutter_application_1/screens/notifications/edit_profile_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -86,7 +87,16 @@ class ProfileScreen extends ConsumerWidget {
                   title: const Text('Edit Profile'),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () {
-                    /* Navigate to Edit Profile Page */
+                    final authStateValue = ref.read(authProvider).value;
+                    if (authStateValue is Authenticated) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditProfileScreen(
+                            currentUser: authStateValue.user,
+                          ),
+                        ),
+                      );
+                    }
                   },
                 ),
                 ListTile(

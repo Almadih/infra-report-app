@@ -17,6 +17,23 @@ class NotificationsScreen extends ConsumerStatefulWidget {
       _NotificationsScreenState();
 }
 
+Widget _getNotificationIcon(AppNotification notification, ThemeData theme) {
+  final isRead = notification.readAt != null;
+  final color = isRead
+      ? Colors.grey.shade600
+      : theme.colorScheme.onPrimaryContainer;
+  switch (notification.type) {
+    case 'App\\Notifications\\ReportStatusNotification':
+      return Icon(Icons.notifications_none, color: color);
+    case 'App\\Notifications\\ReportFlagNotification':
+      return Icon(Icons.flag, color: color);
+    case 'App\\Notifications\\ReportUpdatesNotification':
+      return Icon(Icons.campaign_outlined, color: color);
+    default:
+      return Icon(Icons.notifications_none, color: color);
+  }
+}
+
 class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   bool _isMarkingAsRead = false;
 
@@ -114,6 +131,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     }
   }
 
+  Future<void> _refreshNotifications() async {
+    ref.invalidate(notificationsProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     final notificationsAsync = ref.watch(notificationsProvider);
@@ -147,7 +168,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       ),
 
       body: RefreshIndicator(
-        onRefresh: () => ref.refresh(notificationsProvider.future),
+        onRefresh: _refreshNotifications,
         child: notificationsAsync.when(
           data: (notifications) {
             if (notifications.isEmpty) {
@@ -167,15 +188,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     backgroundColor: isRead
                         ? Colors.grey.shade300
                         : theme.colorScheme.primaryContainer,
-                    child: Icon(
-                      notification.type ==
-                              'App\\Notifications\\ReportStatusNotification'
-                          ? Icons.notifications_none
-                          : Icons.campaign_outlined,
-                      color: isRead
-                          ? Colors.grey.shade600
-                          : theme.colorScheme.onPrimaryContainer,
-                    ),
+                    child: _getNotificationIcon(notification, theme),
                   ),
                   title: Text(
                     notification.title,

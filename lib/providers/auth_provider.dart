@@ -93,8 +93,46 @@ class Auth extends _$Auth {
     // Delete both token and user data
     await _storageService.delete(SecureStorageService.userKey);
     await _storageService.delete(SecureStorageService.tokenKey);
+    await _storageService.delete(SecureStorageService.fcmTokenKey);
     state = const AsyncData(AuthState.unauthenticated());
     // Also clear image cache on logout for privacy
     ref.read(imageCacheManagerProvider).emptyCache();
+  }
+
+  Future<void> updateProfile({
+    required String name,
+    required bool isPublic,
+  }) async {
+    // Get the current authenticated state
+    final currentState = state.value;
+    if (currentState is! Authenticated) {
+      throw Exception("User is not authenticated.");
+    }
+
+    try {
+      // Get the repository (assuming you've added a provider for it)
+      final api = ref.read(apiServiceProvider);
+
+      // Call the repository to update the profile on the server
+      final updatedUser = await api.updateUserProfile(
+        name: name,
+        isPublic: isPublic,
+      );
+
+      // Update local storage with the new user object
+      await _storageService.write(
+        SecureStorageService.userKey,
+        jsonEncode(updatedUser.toJson()),
+      );
+
+      // Update the provider's state with the new user object, keeping the same token.
+      state = AsyncData(
+        AuthState.authenticated(user: updatedUser, token: currentState.token),
+      );
+    } catch (e) {
+      // Don't update the state on failure, just re-throw the error
+      // so the UI can display it.
+      rethrow;
+    }
   }
 }

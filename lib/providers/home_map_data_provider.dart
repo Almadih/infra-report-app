@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'home_map_data_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<HomeMapData> homeMapData(HomeMapDataRef ref) async {
+Future<HomeMapData> homeMapData(ref) async {
   // 1. Get the user's location.
   final userPosition = await ref.watch(userLocationProvider.future);
 

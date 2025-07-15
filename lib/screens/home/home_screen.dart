@@ -52,7 +52,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
 
       // Explicitly trigger a refresh of reports for the new location.
-      await ref.read(reportRepositoryProvider).forceRefreshReports(position);
+      // await ref.read(reportRepositoryProvider).forceRefreshReports(position);
+      ref.invalidate(reportRepositoryProvider);
     } finally {
       if (mounted) {
         setState(() {
