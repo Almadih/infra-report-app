@@ -19,9 +19,7 @@ class NotificationsScreen extends ConsumerStatefulWidget {
 
 Widget _getNotificationIcon(AppNotification notification, ThemeData theme) {
   final isRead = notification.readAt != null;
-  final color = isRead
-      ? Colors.grey.shade600
-      : theme.colorScheme.onPrimaryContainer;
+  final color = isRead ? Colors.grey.shade600 : theme.colorScheme.onPrimary;
   switch (notification.type) {
     case 'App\\Notifications\\ReportStatusNotification':
       return Icon(Icons.notifications_none, color: color);
@@ -120,6 +118,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           builder: (context) => ReportDetailsScreen(report: report),
         ),
       );
+      await ref
+          .read(apiServiceProvider)
+          .markNotificationAsRead(notification.id);
+      await _refreshNotifications();
     } catch (e) {
       Navigator.of(context).pop(); // Dismiss loading dialog
       ScaffoldMessenger.of(context).showSnackBar(
@@ -187,7 +189,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                   leading: CircleAvatar(
                     backgroundColor: isRead
                         ? Colors.grey.shade300
-                        : theme.colorScheme.primaryContainer,
+                        : theme.colorScheme.primary,
                     child: _getNotificationIcon(notification, theme),
                   ),
                   title: Text(

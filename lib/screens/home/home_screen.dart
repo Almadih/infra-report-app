@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for AnnotatedRegion
 import 'package:flutter_application_1/config/google_map_style.dart';
+import 'package:flutter_application_1/providers/auth_provider.dart';
 import 'package:flutter_application_1/providers/home_map_data_provider.dart';
 import 'package:flutter_application_1/providers/location_provider.dart';
 import 'package:flutter_application_1/providers/map_controller_provider.dart';
@@ -119,7 +120,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             width: 18,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Icon(Icons.my_location),
+                        : const Icon(Icons.refresh),
                   ),
                   const SizedBox(height: 16),
                   FloatingActionButton.small(

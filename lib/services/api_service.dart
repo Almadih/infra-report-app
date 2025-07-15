@@ -21,19 +21,23 @@ class ApiService {
     try {
       // This would typically be a PUT or PATCH request.
       final response = await _dio.put(
-        '/api/user/profile', // Your actual endpoint
-        data: {'name': name, 'is_public': isPublic},
+        ApiConfig.profileEndpoint,
+        data: {'name': name, 'show_info_to_public': isPublic},
       );
 
-      if (response.statusCode == 200 && response.data['user'] != null) {
+      print("name $name, isPublic $isPublic");
+
+      if (response.statusCode == 200) {
         print("API CALL: Profile updated successfully.");
         // Return the updated user object from the response
-        return User.fromJson(response.data['user']);
+        return User.fromJson(response.data);
       } else {
+        print(response.data);
         throw Exception('Server returned an error while updating profile.');
       }
-    } on DioException catch (e) {
-      throw Exception('Failed to update profile: ${e.message}');
+    } catch (e) {
+      print('Failed to update profile: ${e.toString()}');
+      throw Exception('Failed to update profile: ${e.toString()}');
     }
   }
 
@@ -65,6 +69,19 @@ class ApiService {
       }
     } on DioException catch (e) {
       throw Exception('Failed to mark notifications as read: ${e.message}');
+    }
+  }
+
+  Future<void> markNotificationAsRead(String id) async {
+    try {
+      final response = await _dio.post(
+        '${ApiConfig.notificationEndpoint}/read-one/$id',
+      );
+      if (response.statusCode != 200) {
+        throw Exception('Failed to mark notification as read.');
+      }
+    } on DioException catch (e) {
+      throw Exception('Failed to mark notification as read: ${e.message}');
     }
   }
 
@@ -352,5 +369,21 @@ class ApiService {
       const Severity(id: 3, name: "High"),
       const Severity(id: 4, name: "Critical"),
     ];
+  }
+
+  Future<User> fetchProfile() async {
+    try {
+      print("fetching profile");
+      final response = await _dio.get(ApiConfig.profileEndpoint);
+      if (response.statusCode == 200) {
+        dynamic data = response.data;
+        return User.fromJson(data);
+      } else {
+        throw Exception('Failed to load profile api : ${response.statusCode}');
+      }
+    } catch (e, s) {
+      print(s);
+      throw Exception('Failed to load profile (Dio): ${e}');
+    }
   }
 }

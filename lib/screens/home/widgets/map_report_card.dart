@@ -111,6 +111,12 @@ class MapReportCard extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
+                              foregroundColor: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary,
                             ),
                             child: const Text('View Details'),
                           ),

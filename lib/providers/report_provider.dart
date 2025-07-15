@@ -9,7 +9,6 @@ part 'report_provider.g.dart';
 
 // Provider to fetch reports
 @riverpod
-@riverpod
 Stream<List<Report>> reports(ref) {
   final repository = ref.watch(reportRepositoryProvider);
   // This is now a pure "read" operation. It just returns the DB stream.

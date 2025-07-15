@@ -26,7 +26,6 @@ class ReportFlagCard extends ConsumerWidget {
     final theme = Theme.of(context);
     return Card(
       elevation: 0,
-      color: theme.colorScheme.onPrimaryContainer,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: Colors.grey.shade300),
@@ -64,40 +63,51 @@ class ReportFlagCard extends ConsumerWidget {
             ],
 
             if (flag.type == 'duplicate' && flag.duplicatedReportId != null)
-              ElevatedButton(
-                onPressed: () async {
-                  final loading = DialogRoute(
-                    context: context,
-                    builder: (_) => Center(child: CircularProgressIndicator()),
-                  );
+              Column(
+                children: [
+                  const SizedBox(height: 15),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    onPressed: () async {
+                      final loading = DialogRoute(
+                        context: context,
+                        builder: (_) =>
+                            Center(child: CircularProgressIndicator()),
+                      );
 
-                  Navigator.of(context).push(loading);
-                  final repo = ref.read(reportRepositoryProvider);
-                  try {
-                    final report = await repo.getReportById(
-                      id: flag.duplicatedReportId!,
-                    );
+                      Navigator.of(context).push(loading);
+                      final repo = ref.read(reportRepositoryProvider);
+                      try {
+                        final report = await repo.getReportById(
+                          id: flag.duplicatedReportId!,
+                        );
 
-                    Navigator.of(
-                      context,
-                    ).pop(loading); // Dismiss loading dialog
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ReportDetailsScreen(report: report),
-                      ),
-                    );
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Could not find report details.'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                child: Text('View Duplicate'),
+                        Navigator.of(
+                          context,
+                        ).pop(loading); // Dismiss loading dialog
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ReportDetailsScreen(report: report),
+                          ),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Could not find report details.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    child: Text('View Duplicate'),
+                  ),
+                ],
               )
             else
               const SizedBox.shrink(),

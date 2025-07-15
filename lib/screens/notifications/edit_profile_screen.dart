@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/user_model.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
+import 'package:flutter_application_1/providers/profile_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -49,6 +50,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           .updateProfile(name: _nameController.text, isPublic: _isPublic);
 
       if (mounted) {
+        ref.invalidate(profileProvider);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Profile updated successfully!'),
@@ -131,6 +133,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
                   onPressed: _isLoading ? null : _saveProfile,
                   child: _isLoading
                       ? const SizedBox(

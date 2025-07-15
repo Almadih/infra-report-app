@@ -6,6 +6,7 @@ import 'package:flutter_application_1/models/auth_state.dart';
 import 'package:flutter_application_1/models/user_model.dart';
 import 'package:flutter_application_1/providers/api_service_provider.dart';
 import 'package:flutter_application_1/providers/image_cache_provider.dart';
+import 'package:flutter_application_1/providers/profile_provider.dart';
 import 'package:flutter_application_1/providers/report_provider.dart';
 import 'package:flutter_application_1/services/api_service.dart';
 import 'package:flutter_application_1/services/secure_storage_service.dart';
@@ -27,13 +28,16 @@ class Auth extends _$Auth {
 
     // Check storage for existing token and user data
     final token = await _storageService.read(SecureStorageService.tokenKey);
-    final user = await _storageService.read(SecureStorageService.userKey);
+    // final user = await _storageService.read(SecureStorageService.userKey);
+    final user = await _apiService.fetchProfile();
 
-    if (token != null && user != null) {
-      return AuthState.authenticated(
-        user: User.fromJson(jsonDecode(user)),
-        token: token,
-      );
+    await _storageService.write(
+      SecureStorageService.userKey,
+      jsonEncode(user.toJson()),
+    );
+
+    if (token != null) {
+      return AuthState.authenticated(user: user, token: token);
     }
 
     return const AuthState.unauthenticated();
@@ -103,36 +107,28 @@ class Auth extends _$Auth {
     required String name,
     required bool isPublic,
   }) async {
-    // Get the current authenticated state
-    final currentState = state.value;
-    if (currentState is! Authenticated) {
-      throw Exception("User is not authenticated.");
-    }
+    // Call the repository to update the profile on the server
+    final updatedUser = await _apiService.updateUserProfile(
+      name: name,
+      isPublic: isPublic,
+    );
 
-    try {
-      // Get the repository (assuming you've added a provider for it)
-      final api = ref.read(apiServiceProvider);
+    // Update local storage with the new user object
+    await _storageService.write(
+      SecureStorageService.userKey,
+      jsonEncode(updatedUser.toJson()),
+    );
+  }
 
-      // Call the repository to update the profile on the server
-      final updatedUser = await api.updateUserProfile(
-        name: name,
-        isPublic: isPublic,
-      );
-
-      // Update local storage with the new user object
-      await _storageService.write(
-        SecureStorageService.userKey,
-        jsonEncode(updatedUser.toJson()),
-      );
-
-      // Update the provider's state with the new user object, keeping the same token.
-      state = AsyncData(
-        AuthState.authenticated(user: updatedUser, token: currentState.token),
-      );
-    } catch (e) {
-      // Don't update the state on failure, just re-throw the error
-      // so the UI can display it.
-      rethrow;
-    }
+  Future<User> fetchProfile() async {
+    final user = await _apiService.fetchProfile();
+    print("api user $user");
+    await _storageService.write(
+      SecureStorageService.userKey,
+      jsonEncode(user.toJson()),
+    );
+    final jsonUser = await _storageService.read(SecureStorageService.userKey);
+    print("json user $jsonUser");
+    return user;
   }
 }

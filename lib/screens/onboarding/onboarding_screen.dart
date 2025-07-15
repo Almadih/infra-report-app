@@ -40,8 +40,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ),
   ];
 
-  get theme => null;
-
   void _getStarted() async {
     setState(() {
       _isAuthenticating = true;
@@ -69,6 +67,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         setState(() {
           _isAuthenticating = false;
         });
+
+        final theme = widget.theme;
 
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => MyApp(theme: theme)),
@@ -103,7 +103,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    print(theme.colorScheme.primary);
     return ScaffoldGradientBackground(
       // backgroundColor: Colors.green, // Or a custom onboarding background
       gradient: LinearGradient(

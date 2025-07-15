@@ -31,6 +31,7 @@ class ReportOwnerCard extends StatelessWidget {
     final numberFormatter = NumberFormat.compact();
 
     return Card(
+      color: theme.colorScheme.surface,
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/providers/navigator_key_provider.dart';
 import 'package:flutter_application_1/providers/notification_provider.dart';
+import 'package:flutter_application_1/providers/profile_provider.dart';
 import 'package:flutter_application_1/screens/notifications/notifications_screen.dart';
 import 'package:flutter_application_1/widgets/offline_banner.dart';
 import 'package:flutter_application_1/widgets/sync_banner.dart';

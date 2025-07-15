@@ -9,5 +9,6 @@ class ApiConfig {
   static const String authEndpoint = "/api/auth";
   static const String notificationEndpoint = "/api/notifications";
   static const String fcmTokenEndpoint = "/api/fcm-token";
+  static const String profileEndpoint = "/api/profile";
   static const bool useMockData = false;
 }

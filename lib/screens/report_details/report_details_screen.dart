@@ -43,8 +43,11 @@ Widget _buildUpdatesSection(BuildContext context, app_models.Report report) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
+      const SizedBox(height: 8),
+
       const Divider(),
-      const SizedBox(height: 16),
+
+      const SizedBox(height: 8),
       Text(
         'Report Updates',
         style: theme.textTheme.titleLarge?.copyWith(
@@ -82,7 +85,9 @@ Widget _buildFlagsSection(BuildContext context, app_models.Report report) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const SizedBox(height: 16),
+      const SizedBox(height: 8),
+      const Divider(),
+      const SizedBox(height: 8),
       Row(
         children: [
           Icon(Icons.flag_circle, color: theme.colorScheme.error),
@@ -106,7 +111,6 @@ Widget _buildFlagsSection(BuildContext context, app_models.Report report) {
           return ReportFlagCard(flag: report.flags[index]);
         },
       ),
-      const Divider(),
     ],
   );
 }
@@ -280,11 +284,6 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                     ),
                   ),
                   StatusStepper(currentStatus: report.status.name),
-                  _buildFlagsSection(context, report),
-
-                  _buildUpdatesSection(context, report),
-                  const Divider(),
-                  const SizedBox(height: 16),
 
                   // Details Section
                   Text(
@@ -330,6 +329,8 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                       title: 'Description',
                       value: report.description!,
                     ),
+                  _buildUpdatesSection(context, report),
+                  _buildFlagsSection(context, report),
                 ],
               ),
             ),
