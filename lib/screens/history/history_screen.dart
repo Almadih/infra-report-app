@@ -1,14 +1,14 @@
 // lib/screens/history/history_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/my_reports_provider.dart';
-import 'package:flutter_application_1/repositories/report_repository.dart';
-import 'package:flutter_application_1/screens/history/widgets/report_card_skeleton.dart';
-import 'package:flutter_application_1/widgets/authenticated_image.dart';
+import 'package:infra_report/providers/my_reports_provider.dart';
+import 'package:infra_report/repositories/report_repository.dart';
+import 'package:infra_report/screens/history/widgets/report_card_skeleton.dart';
+import 'package:infra_report/widgets/authenticated_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_1/models/report_model.dart' as app_report;
-import 'package:flutter_application_1/screens/report_details/report_details_screen.dart';
-import 'package:flutter_application_1/screens/history/widgets/severity_badge.dart';
-import 'package:flutter_application_1/screens/history/widgets/status_badge.dart';
+import 'package:infra_report/models/report_model.dart' as app_report;
+import 'package:infra_report/screens/report_details/report_details_screen.dart';
+import 'package:infra_report/screens/history/widgets/severity_badge.dart';
+import 'package:infra_report/screens/history/widgets/status_badge.dart';
 import 'package:intl/intl.dart';
 
 class HistoryScreen extends ConsumerWidget {
@@ -57,15 +57,7 @@ class HistoryScreen extends ConsumerWidget {
       body: RefreshIndicator(
         // Key feature: onRefresh callback
         onRefresh: () async {
-          // Invalidate the provider to trigger a refetch.
-          // The 'reportsProvider' FutureProvider will automatically
-          // re-execute its logic when invalidated.
           ref.invalidate(myReportsProvider);
-          // You might want to await the new future if you need to do something
-          // after the refresh completes, but for just triggering a refresh,
-          // invalidating is often enough. The UI will update when the provider resolves.
-          // For example, to ensure the refresh indicator spinner stays until data is loaded:
-          await ref.read(reportRepositoryProvider).forceRefreshMyReports();
         },
         child: reportsAsyncValue.when(
           data: (reports) {

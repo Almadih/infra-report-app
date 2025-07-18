@@ -1,6 +1,6 @@
 // lib/services/image_cache_manager.dart
 import 'package:dio/dio.dart' as dio;
-import 'package:flutter_application_1/config/api_config.dart';
+import 'package:infra_report/config/api_config.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
 

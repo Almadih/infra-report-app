@@ -1,5 +1,5 @@
-import 'package:flutter_application_1/providers/dio_provider.dart';
-import 'package:flutter_application_1/services/api_service.dart';
+import 'package:infra_report/providers/dio_provider.dart';
+import 'package:infra_report/services/api_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'api_service_provider.g.dart';

@@ -1,4 +1,4 @@
-name: flutter_application_1
+name: infra_report
 description: "A new Flutter project."
 publish_to: "none"
 version: 0.1.0
@@ -16,7 +16,7 @@ dependencies:
   google_maps_flutter: ^2.12.2 # Check for latest version
   dio: ^5.4.0 # For API calls
   image_picker: ^1.0.7 # Check for latest version
-  geolocator: ^11.0.0 # Check for latest version
+  geolocator: ^14.0.2 # Check for latest version
   permission_handler: ^11.3.0 # Check for latest version
   flutter_staggered_grid_view: ^0.7.0 # For image preview grid
   intl: ^0.20.2
@@ -46,6 +46,7 @@ dependencies:
   firebase_messaging: ^15.2.7
   flutter_local_notifications: ^19.3.0
   json_theme: ^9.0.1+2
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:

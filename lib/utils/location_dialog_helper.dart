@@ -1,6 +1,6 @@
 // lib/utils/location_dialog_helper.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/utils/exceptions.dart';
+import 'package:infra_report/utils/exceptions.dart';
 import 'package:geolocator/geolocator.dart'
     hide LocationServiceDisabledException;
 import 'package:permission_handler/permission_handler.dart'; // For opening app settings

@@ -4,16 +4,16 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/providers/api_service_provider.dart';
-import 'package:flutter_application_1/providers/dio_provider.dart';
-import 'package:flutter_application_1/providers/navigator_key_provider.dart';
-import 'package:flutter_application_1/providers/notification_provider.dart';
-import 'package:flutter_application_1/providers/report_provider.dart';
-import 'package:flutter_application_1/repositories/report_repository.dart';
-import 'package:flutter_application_1/screens/report_details/report_details_screen.dart';
-import 'package:flutter_application_1/services/api_service.dart';
-import 'package:flutter_application_1/services/secure_storage_service.dart';
+import 'package:infra_report/main.dart';
+import 'package:infra_report/providers/api_service_provider.dart';
+import 'package:infra_report/providers/dio_provider.dart';
+import 'package:infra_report/providers/navigator_key_provider.dart';
+import 'package:infra_report/providers/notification_provider.dart';
+import 'package:infra_report/providers/report_provider.dart';
+import 'package:infra_report/repositories/report_repository.dart';
+import 'package:infra_report/screens/report_details/report_details_screen.dart';
+import 'package:infra_report/services/api_service.dart';
+import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -44,11 +44,13 @@ class NotificationService {
     }
     print("FCM Token: $fcmToken");
 
+    final token = await _storageService.read(SecureStorageService.tokenKey);
+
     final storeFcmToken = await _storageService.read(
       SecureStorageService.fcmTokenKey,
     );
 
-    if (fcmToken != storeFcmToken) {
+    if (fcmToken != storeFcmToken && token != null) {
       await _apiService.saveFcmToken(fcmToken);
       await _storageService.write(SecureStorageService.fcmTokenKey, fcmToken);
     } else {

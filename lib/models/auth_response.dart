@@ -1,6 +1,6 @@
 // lib/models/auth_response.dart
 
-import 'package:flutter_application_1/models/user_model.dart';
+import 'package:infra_report/models/user_model.dart';
 
 class AuthResponse {
   final String token;

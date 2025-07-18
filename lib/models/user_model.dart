@@ -10,6 +10,7 @@ sealed class User with _$User {
     required String name,
     required String email,
     required int reputation,
+    @JsonKey(name: 'reputation_title') required String reputationTitle,
     @JsonKey(name: 'show_info_to_public') required bool isPublic,
   }) = _User;
 

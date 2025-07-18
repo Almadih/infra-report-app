@@ -1,8 +1,8 @@
 // lib/providers/dio_provider.dart
 import 'package:dio/dio.dart';
-import 'package:flutter_application_1/config/api_config.dart';
-import 'package:flutter_application_1/services/dio_interceptor.dart';
-import 'package:flutter_application_1/services/secure_storage_service.dart';
+import 'package:infra_report/config/api_config.dart';
+import 'package:infra_report/services/dio_interceptor.dart';
+import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dio_provider.g.dart';

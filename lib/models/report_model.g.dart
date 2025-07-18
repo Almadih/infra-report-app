@@ -66,6 +66,7 @@ _ReportUser _$ReportUserFromJson(Map<String, dynamic> json) => _ReportUser(
   id: (json['id'] as num).toInt(),
   name: json['name'] as String,
   reputation: (json['reputation'] as num).toInt(),
+  reputationTitle: json['reputation_title'] as String,
 );
 
 Map<String, dynamic> _$ReportUserToJson(_ReportUser instance) =>
@@ -73,6 +74,7 @@ Map<String, dynamic> _$ReportUserToJson(_ReportUser instance) =>
       'id': instance.id,
       'name': instance.name,
       'reputation': instance.reputation,
+      'reputation_title': instance.reputationTitle,
     };
 
 _ReportLocation _$ReportLocationFromJson(Map<String, dynamic> json) =>

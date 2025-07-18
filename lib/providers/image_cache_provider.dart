@@ -1,6 +1,6 @@
 // lib/providers/image_cache_provider.dart
-import 'package:flutter_application_1/providers/dio_provider.dart';
-import 'package:flutter_application_1/services/image_cache_manager.dart';
+import 'package:infra_report/providers/dio_provider.dart';
+import 'package:infra_report/services/image_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'image_cache_provider.g.dart';

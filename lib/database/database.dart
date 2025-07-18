@@ -5,10 +5,10 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_application_1/models/notification_model.dart';
+import 'package:infra_report/models/notification_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:flutter_application_1/models/report_model.dart' as app_models;
+import 'package:infra_report/models/report_model.dart' as app_models;
 import 'tables.dart';
 
 part 'database.g.dart'; // Drift will generate this file
@@ -28,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 13; // Increment this when you change tables
+  int get schemaVersion => 2; // Increment this when you change tables
 
   @override
   MigrationStrategy get migration {
@@ -260,51 +260,55 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<void> cacheApiReports(List<app_models.Report> apiReports) async {
-    await batch((batch) {
-      // Clear old data for a full refresh
-      batch.deleteAll(localReportImages);
-      batch.deleteAll(localReports);
+    try {
+      await batch((batch) {
+        // Clear old data for a full refresh
+        batch.deleteAll(localReportImages);
+        batch.deleteAll(localReports);
 
-      for (final apiReport in apiReports) {
-        batch.insert(
-          localReports,
-          LocalReportsCompanion.insert(
-            id: apiReport.id,
-            userId: apiReport.userId,
-            severityId: apiReport.severityId,
-            statusId: apiReport.statusId,
-            damageTypeId: apiReport.damageTypeId,
-            latitude: apiReport.location.coordinates[1], // lat
-            longitude: apiReport.location.coordinates[0], // lng
-            description: Value(apiReport.description),
-            address: apiReport.address,
-            createdAt: apiReport.createdAt,
-            updatedAt: apiReport.updatedAt,
-            city: Value(apiReport.city),
-            damageTypeName: apiReport.damageType.name,
-            severityName: apiReport.severity.name,
-            statusName: apiReport.status.name,
-            updates: Value(jsonEncode(apiReport.updates)),
-            flags: Value(jsonEncode(apiReport.flags)),
-            user: Value(
-              apiReport.user != null ? jsonEncode(apiReport.user) : null,
-            ),
-          ),
-          mode: InsertMode.insertOrReplace,
-        );
-
-        for (final img in apiReport.images) {
+        for (final apiReport in apiReports) {
           batch.insert(
-            localReportImages,
-            LocalReportImagesCompanion.insert(
-              id: Value(img.id),
-              reportId: apiReport.id,
-              url: img.path,
+            localReports,
+            LocalReportsCompanion.insert(
+              id: apiReport.id,
+              userId: apiReport.userId,
+              severityId: apiReport.severityId,
+              statusId: apiReport.statusId,
+              damageTypeId: apiReport.damageTypeId,
+              latitude: apiReport.location.coordinates[1], // lat
+              longitude: apiReport.location.coordinates[0], // lng
+              description: Value(apiReport.description),
+              address: apiReport.address,
+              createdAt: apiReport.createdAt,
+              updatedAt: apiReport.updatedAt,
+              city: Value(apiReport.city),
+              damageTypeName: apiReport.damageType.name,
+              severityName: apiReport.severity.name,
+              statusName: apiReport.status.name,
+              updates: Value(jsonEncode(apiReport.updates)),
+              flags: Value(jsonEncode(apiReport.flags)),
+              user: Value(
+                apiReport.user != null ? jsonEncode(apiReport.user) : null,
+              ),
             ),
+            mode: InsertMode.insertOrReplace,
           );
+
+          for (final img in apiReport.images) {
+            batch.insert(
+              localReportImages,
+              LocalReportImagesCompanion.insert(
+                id: Value(img.id),
+                reportId: apiReport.id,
+                url: img.path,
+              ),
+            );
+          }
         }
-      }
-    });
+      });
+    } catch (e) {
+      print("sync error $e");
+    }
   }
 
   Future<void> cacheApiMyReports(List<app_models.Report> apiReports) async {
@@ -438,6 +442,16 @@ class AppDatabase extends _$AppDatabase {
           ),
         ),
       );
+    });
+  }
+
+  Future<void> deleteEverything() {
+    return transaction(() async {
+      // you only need this if you've manually enabled foreign keys
+      // await customStatement('PRAGMA foreign_keys = OFF');
+      for (final table in allTables) {
+        await delete(table).go();
+      }
     });
   }
 }

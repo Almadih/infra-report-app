@@ -1,6 +1,6 @@
 // lib/screens/report_details/widgets/report_owner_card.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/report_model.dart';
+import 'package:infra_report/models/report_model.dart';
 import 'package:intl/intl.dart';
 
 class ReportOwnerCard extends StatelessWidget {
@@ -14,14 +14,6 @@ class ReportOwnerCard extends StatelessWidget {
     if (reputation < 500) return Colors.blue.shade600;
     if (reputation < 2000) return Colors.green.shade600;
     return Colors.amber.shade700;
-  }
-
-  // Helper to get a reputation title
-  String _getReputationTitle(int reputation) {
-    if (reputation < 100) return 'Newcomer';
-    if (reputation < 500) return 'Contributor';
-    if (reputation < 2000) return 'Trusted Contributor';
-    return 'Veteran Reporter';
   }
 
   @override
@@ -57,7 +49,7 @@ class ReportOwnerCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    _getReputationTitle(owner.reputation),
+                    owner.reputationTitle,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: reputationColor,
                       fontWeight: FontWeight.w600,

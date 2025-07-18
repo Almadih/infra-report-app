@@ -1,6 +1,6 @@
 // lib/widgets/offline_banner.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/connectivity_provider.dart';
+import 'package:infra_report/providers/connectivity_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// A banner that appears at the top of the screen when the device is offline.

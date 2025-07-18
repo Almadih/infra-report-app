@@ -1,8 +1,8 @@
 // lib/screens/report_details/widgets/report_flag_card.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/report_model.dart';
-import 'package:flutter_application_1/repositories/report_repository.dart';
-import 'package:flutter_application_1/screens/report_details/report_details_screen.dart';
+import 'package:infra_report/models/report_model.dart';
+import 'package:infra_report/repositories/report_repository.dart';
+import 'package:infra_report/screens/report_details/report_details_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 

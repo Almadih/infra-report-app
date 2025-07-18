@@ -57,8 +57,7 @@ class MyLocalReports extends Table {
 // A separate table for images, linked by the report's ID
 class LocalReportImages extends Table {
   IntColumn get id => integer()(); // Local DB key
-  TextColumn get reportId =>
-      text().references(LocalReports, #id)(); // Foreign key
+  TextColumn get reportId => text()(); // Foreign key
   TextColumn get url => text()();
   @override
   Set<Column> get primaryKey => {id};

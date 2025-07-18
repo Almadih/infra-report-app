@@ -54,9 +54,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCbs3u1uT6Ansj3k0AQJ-7EAUD6EOItrSk',
-    appId: '1:684617375721:android:687ce511efdb4bdc53b578',
+    appId: '1:684617375721:android:f2a82b8a7273f7c653b578',
     messagingSenderId: '684617375721',
     projectId: 'typechatter',
     storageBucket: 'typechatter.firebasestorage.app',
   );
+
 }

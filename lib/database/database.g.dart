@@ -1031,9 +1031,6 @@ class $LocalReportImagesTable extends LocalReportImages
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES local_reports (id)',
-    ),
   );
   static const VerificationMeta _urlMeta = const VerificationMeta('url');
   @override
@@ -3770,35 +3767,6 @@ typedef $$LocalReportsTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
-final class $$LocalReportsTableReferences
-    extends BaseReferences<_$AppDatabase, $LocalReportsTable, LocalReport> {
-  $$LocalReportsTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$LocalReportImagesTable, List<LocalReportImage>>
-  _localReportImagesRefsTable(_$AppDatabase db) =>
-      MultiTypedResultKey.fromTable(
-        db.localReportImages,
-        aliasName: $_aliasNameGenerator(
-          db.localReports.id,
-          db.localReportImages.reportId,
-        ),
-      );
-
-  $$LocalReportImagesTableProcessedTableManager get localReportImagesRefs {
-    final manager = $$LocalReportImagesTableTableManager(
-      $_db,
-      $_db.localReportImages,
-    ).filter((f) => f.reportId.id.sqlEquals($_itemColumn<String>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(
-      _localReportImagesRefsTable($_db),
-    );
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
-
 class $$LocalReportsTableFilterComposer
     extends Composer<_$AppDatabase, $LocalReportsTable> {
   $$LocalReportsTableFilterComposer({
@@ -3897,31 +3865,6 @@ class $$LocalReportsTableFilterComposer
     column: $table.statusName,
     builder: (column) => ColumnFilters(column),
   );
-
-  Expression<bool> localReportImagesRefs(
-    Expression<bool> Function($$LocalReportImagesTableFilterComposer f) f,
-  ) {
-    final $$LocalReportImagesTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.localReportImages,
-      getReferencedColumn: (t) => t.reportId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$LocalReportImagesTableFilterComposer(
-            $db: $db,
-            $table: $db.localReportImages,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$LocalReportsTableOrderingComposer
@@ -4098,32 +4041,6 @@ class $$LocalReportsTableAnnotationComposer
     column: $table.statusName,
     builder: (column) => column,
   );
-
-  Expression<T> localReportImagesRefs<T extends Object>(
-    Expression<T> Function($$LocalReportImagesTableAnnotationComposer a) f,
-  ) {
-    final $$LocalReportImagesTableAnnotationComposer composer =
-        $composerBuilder(
-          composer: this,
-          getCurrentColumn: (t) => t.id,
-          referencedTable: $db.localReportImages,
-          getReferencedColumn: (t) => t.reportId,
-          builder:
-              (
-                joinBuilder, {
-                $addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer,
-              }) => $$LocalReportImagesTableAnnotationComposer(
-                $db: $db,
-                $table: $db.localReportImages,
-                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                joinBuilder: joinBuilder,
-                $removeJoinBuilderFromRootComposer:
-                    $removeJoinBuilderFromRootComposer,
-              ),
-        );
-    return f(composer);
-  }
 }
 
 class $$LocalReportsTableTableManager
@@ -4137,9 +4054,12 @@ class $$LocalReportsTableTableManager
           $$LocalReportsTableAnnotationComposer,
           $$LocalReportsTableCreateCompanionBuilder,
           $$LocalReportsTableUpdateCompanionBuilder,
-          (LocalReport, $$LocalReportsTableReferences),
+          (
+            LocalReport,
+            BaseReferences<_$AppDatabase, $LocalReportsTable, LocalReport>,
+          ),
           LocalReport,
-          PrefetchHooks Function({bool localReportImagesRefs})
+          PrefetchHooks Function()
         > {
   $$LocalReportsTableTableManager(_$AppDatabase db, $LocalReportsTable table)
     : super(
@@ -4237,45 +4157,9 @@ class $$LocalReportsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$LocalReportsTableReferences(db, table, e),
-                ),
-              )
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({localReportImagesRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (localReportImagesRefs) db.localReportImages,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (localReportImagesRefs)
-                    await $_getPrefetchedData<
-                      LocalReport,
-                      $LocalReportsTable,
-                      LocalReportImage
-                    >(
-                      currentTable: table,
-                      referencedTable: $$LocalReportsTableReferences
-                          ._localReportImagesRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$LocalReportsTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).localReportImagesRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.reportId == item.id),
-                      typedResults: items,
-                    ),
-                ];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ),
       );
 }
@@ -4290,9 +4174,12 @@ typedef $$LocalReportsTableProcessedTableManager =
       $$LocalReportsTableAnnotationComposer,
       $$LocalReportsTableCreateCompanionBuilder,
       $$LocalReportsTableUpdateCompanionBuilder,
-      (LocalReport, $$LocalReportsTableReferences),
+      (
+        LocalReport,
+        BaseReferences<_$AppDatabase, $LocalReportsTable, LocalReport>,
+      ),
       LocalReport,
-      PrefetchHooks Function({bool localReportImagesRefs})
+      PrefetchHooks Function()
     >;
 typedef $$LocalReportImagesTableCreateCompanionBuilder =
     LocalReportImagesCompanion Function({
@@ -4306,39 +4193,6 @@ typedef $$LocalReportImagesTableUpdateCompanionBuilder =
       Value<String> reportId,
       Value<String> url,
     });
-
-final class $$LocalReportImagesTableReferences
-    extends
-        BaseReferences<
-          _$AppDatabase,
-          $LocalReportImagesTable,
-          LocalReportImage
-        > {
-  $$LocalReportImagesTableReferences(
-    super.$_db,
-    super.$_table,
-    super.$_typedResult,
-  );
-
-  static $LocalReportsTable _reportIdTable(_$AppDatabase db) =>
-      db.localReports.createAlias(
-        $_aliasNameGenerator(db.localReportImages.reportId, db.localReports.id),
-      );
-
-  $$LocalReportsTableProcessedTableManager get reportId {
-    final $_column = $_itemColumn<String>('report_id')!;
-
-    final manager = $$LocalReportsTableTableManager(
-      $_db,
-      $_db.localReports,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_reportIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-}
 
 class $$LocalReportImagesTableFilterComposer
     extends Composer<_$AppDatabase, $LocalReportImagesTable> {
@@ -4354,33 +4208,15 @@ class $$LocalReportImagesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get reportId => $composableBuilder(
+    column: $table.reportId,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get url => $composableBuilder(
     column: $table.url,
     builder: (column) => ColumnFilters(column),
   );
-
-  $$LocalReportsTableFilterComposer get reportId {
-    final $$LocalReportsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.reportId,
-      referencedTable: $db.localReports,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$LocalReportsTableFilterComposer(
-            $db: $db,
-            $table: $db.localReports,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$LocalReportImagesTableOrderingComposer
@@ -4397,33 +4233,15 @@ class $$LocalReportImagesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get reportId => $composableBuilder(
+    column: $table.reportId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get url => $composableBuilder(
     column: $table.url,
     builder: (column) => ColumnOrderings(column),
   );
-
-  $$LocalReportsTableOrderingComposer get reportId {
-    final $$LocalReportsTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.reportId,
-      referencedTable: $db.localReports,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$LocalReportsTableOrderingComposer(
-            $db: $db,
-            $table: $db.localReports,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$LocalReportImagesTableAnnotationComposer
@@ -4438,31 +4256,11 @@ class $$LocalReportImagesTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get reportId =>
+      $composableBuilder(column: $table.reportId, builder: (column) => column);
+
   GeneratedColumn<String> get url =>
       $composableBuilder(column: $table.url, builder: (column) => column);
-
-  $$LocalReportsTableAnnotationComposer get reportId {
-    final $$LocalReportsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.reportId,
-      referencedTable: $db.localReports,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$LocalReportsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.localReports,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$LocalReportImagesTableTableManager
@@ -4476,9 +4274,16 @@ class $$LocalReportImagesTableTableManager
           $$LocalReportImagesTableAnnotationComposer,
           $$LocalReportImagesTableCreateCompanionBuilder,
           $$LocalReportImagesTableUpdateCompanionBuilder,
-          (LocalReportImage, $$LocalReportImagesTableReferences),
+          (
+            LocalReportImage,
+            BaseReferences<
+              _$AppDatabase,
+              $LocalReportImagesTable,
+              LocalReportImage
+            >,
+          ),
           LocalReportImage,
-          PrefetchHooks Function({bool reportId})
+          PrefetchHooks Function()
         > {
   $$LocalReportImagesTableTableManager(
     _$AppDatabase db,
@@ -4517,56 +4322,9 @@ class $$LocalReportImagesTableTableManager
                 url: url,
               ),
           withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$LocalReportImagesTableReferences(db, table, e),
-                ),
-              )
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({reportId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (reportId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.reportId,
-                                referencedTable:
-                                    $$LocalReportImagesTableReferences
-                                        ._reportIdTable(db),
-                                referencedColumn:
-                                    $$LocalReportImagesTableReferences
-                                        ._reportIdTable(db)
-                                        .id,
-                              )
-                              as T;
-                    }
-
-                    return state;
-                  },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ),
       );
 }
@@ -4581,9 +4339,16 @@ typedef $$LocalReportImagesTableProcessedTableManager =
       $$LocalReportImagesTableAnnotationComposer,
       $$LocalReportImagesTableCreateCompanionBuilder,
       $$LocalReportImagesTableUpdateCompanionBuilder,
-      (LocalReportImage, $$LocalReportImagesTableReferences),
+      (
+        LocalReportImage,
+        BaseReferences<
+          _$AppDatabase,
+          $LocalReportImagesTable,
+          LocalReportImage
+        >,
+      ),
       LocalReportImage,
-      PrefetchHooks Function({bool reportId})
+      PrefetchHooks Function()
     >;
 typedef $$LocalDamageTypesTableCreateCompanionBuilder =
     LocalDamageTypesCompanion Function({Value<int> id, required String name});

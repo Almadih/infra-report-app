@@ -314,7 +314,7 @@ $ReportUserCopyWith<$Res>? get user {
 /// @nodoc
 mixin _$ReportUser {
 
- int get id; String get name; int get reputation;
+ int get id; String get name; int get reputation;@JsonKey(name: 'reputation_title') String get reputationTitle;
 /// Create a copy of ReportUser
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -327,16 +327,16 @@ $ReportUserCopyWith<ReportUser> get copyWith => _$ReportUserCopyWithImpl<ReportU
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReportUser&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.reputation, reputation) || other.reputation == reputation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReportUser&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.reputation, reputation) || other.reputation == reputation)&&(identical(other.reputationTitle, reputationTitle) || other.reputationTitle == reputationTitle));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,reputation);
+int get hashCode => Object.hash(runtimeType,id,name,reputation,reputationTitle);
 
 @override
 String toString() {
-  return 'ReportUser(id: $id, name: $name, reputation: $reputation)';
+  return 'ReportUser(id: $id, name: $name, reputation: $reputation, reputationTitle: $reputationTitle)';
 }
 
 
@@ -347,7 +347,7 @@ abstract mixin class $ReportUserCopyWith<$Res>  {
   factory $ReportUserCopyWith(ReportUser value, $Res Function(ReportUser) _then) = _$ReportUserCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, int reputation
+ int id, String name, int reputation,@JsonKey(name: 'reputation_title') String reputationTitle
 });
 
 
@@ -364,12 +364,13 @@ class _$ReportUserCopyWithImpl<$Res>
 
 /// Create a copy of ReportUser
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? reputation = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? reputation = null,Object? reputationTitle = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,reputation: null == reputation ? _self.reputation : reputation // ignore: cast_nullable_to_non_nullable
-as int,
+as int,reputationTitle: null == reputationTitle ? _self.reputationTitle : reputationTitle // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -380,12 +381,13 @@ as int,
 @JsonSerializable()
 
 class _ReportUser implements ReportUser {
-  const _ReportUser({required this.id, required this.name, required this.reputation});
+  const _ReportUser({required this.id, required this.name, required this.reputation, @JsonKey(name: 'reputation_title') required this.reputationTitle});
   factory _ReportUser.fromJson(Map<String, dynamic> json) => _$ReportUserFromJson(json);
 
 @override final  int id;
 @override final  String name;
 @override final  int reputation;
+@override@JsonKey(name: 'reputation_title') final  String reputationTitle;
 
 /// Create a copy of ReportUser
 /// with the given fields replaced by the non-null parameter values.
@@ -400,16 +402,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReportUser&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.reputation, reputation) || other.reputation == reputation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReportUser&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.reputation, reputation) || other.reputation == reputation)&&(identical(other.reputationTitle, reputationTitle) || other.reputationTitle == reputationTitle));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,reputation);
+int get hashCode => Object.hash(runtimeType,id,name,reputation,reputationTitle);
 
 @override
 String toString() {
-  return 'ReportUser(id: $id, name: $name, reputation: $reputation)';
+  return 'ReportUser(id: $id, name: $name, reputation: $reputation, reputationTitle: $reputationTitle)';
 }
 
 
@@ -420,7 +422,7 @@ abstract mixin class _$ReportUserCopyWith<$Res> implements $ReportUserCopyWith<$
   factory _$ReportUserCopyWith(_ReportUser value, $Res Function(_ReportUser) _then) = __$ReportUserCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, int reputation
+ int id, String name, int reputation,@JsonKey(name: 'reputation_title') String reputationTitle
 });
 
 
@@ -437,12 +439,13 @@ class __$ReportUserCopyWithImpl<$Res>
 
 /// Create a copy of ReportUser
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? reputation = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? reputation = null,Object? reputationTitle = null,}) {
   return _then(_ReportUser(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,reputation: null == reputation ? _self.reputation : reputation // ignore: cast_nullable_to_non_nullable
-as int,
+as int,reputationTitle: null == reputationTitle ? _self.reputationTitle : reputationTitle // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

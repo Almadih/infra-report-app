@@ -37,6 +37,7 @@ sealed class ReportUser with _$ReportUser {
     required int id,
     required String name,
     required int reputation,
+    @JsonKey(name: 'reputation_title') required String reputationTitle,
   }) = _ReportUser;
 
   factory ReportUser.fromJson(Map<String, dynamic> json) =>

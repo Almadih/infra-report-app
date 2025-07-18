@@ -1,6 +1,6 @@
 // lib/screens/report_details/widgets/report_update_tile.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/report_model.dart';
+import 'package:infra_report/models/report_model.dart';
 import 'package:intl/intl.dart';
 
 class ReportUpdateTile extends StatelessWidget {

@@ -1,6 +1,6 @@
 // lib/screens/report_details/widgets/fullscreen_image_viewer.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/widgets/authenticated_image.dart';
+import 'package:infra_report/widgets/authenticated_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 

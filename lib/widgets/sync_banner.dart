@@ -1,8 +1,8 @@
 // lib/widgets/sync_banner.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/sync_provider.dart';
+import 'package:infra_report/providers/sync_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_1/models/sync_status.dart';
+import 'package:infra_report/models/sync_status.dart';
 
 class SyncBanner extends ConsumerWidget {
   const SyncBanner({super.key});

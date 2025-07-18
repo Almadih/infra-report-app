@@ -1,9 +1,9 @@
 // lib/screens/profile/profile_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/auth_state.dart';
-import 'package:flutter_application_1/providers/auth_provider.dart';
-import 'package:flutter_application_1/providers/profile_provider.dart';
-import 'package:flutter_application_1/screens/notifications/edit_profile_screen.dart';
+import 'package:infra_report/models/auth_state.dart';
+import 'package:infra_report/providers/auth_provider.dart';
+import 'package:infra_report/providers/profile_provider.dart';
+import 'package:infra_report/screens/notifications/edit_profile_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -72,7 +72,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "Reputation: ${user.reputation}",
+                    "${user.reputationTitle}: ${user.reputation}",
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: Colors.grey[600],
                     ),

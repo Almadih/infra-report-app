@@ -2,11 +2,11 @@
 import 'dart:convert';
 import 'dart:developer'; // For logging
 import 'package:dio/dio.dart';
-import 'package:flutter_application_1/config/api_config.dart';
-import 'package:flutter_application_1/models/auth_response.dart';
-import 'package:flutter_application_1/models/notification_model.dart';
-import 'package:flutter_application_1/models/report_model.dart';
-import 'package:flutter_application_1/models/user_model.dart';
+import 'package:infra_report/config/api_config.dart';
+import 'package:infra_report/models/auth_response.dart';
+import 'package:infra_report/models/notification_model.dart';
+import 'package:infra_report/models/report_model.dart';
+import 'package:infra_report/models/user_model.dart';
 import 'package:geolocator/geolocator.dart';
 
 class ApiService {
@@ -144,12 +144,12 @@ class ApiService {
         List<dynamic> data = response.data is List
             ? response.data
             : response.data['data'];
-        print("usr ${data.first['user']}");
+        print("length ${data.length}");
         return data.map((json) => Report.fromJson(json)).toList();
       } else {
         throw Exception('Failed to load reports api : ${response.statusCode}');
       }
-    } on DioException catch (e) {
+    } catch (e) {
       throw Exception('Failed to load reports (Dio): ${e}');
     }
   }

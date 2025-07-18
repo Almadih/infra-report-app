@@ -1,5 +1,5 @@
 // lib/providers/location_provider.dart
-import 'package:flutter_application_1/utils/exceptions.dart';
+import 'package:infra_report/utils/exceptions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:geolocator/geolocator.dart'
     hide LocationServiceDisabledException;

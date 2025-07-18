@@ -1,6 +1,6 @@
 // lib/services/app_cache_manager.dart
 import 'package:dio/dio.dart';
-import 'package:flutter_application_1/services/image_cache_manager.dart';
+import 'package:infra_report/services/image_cache_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 /// This is the single, global instance of our custom cache manager.

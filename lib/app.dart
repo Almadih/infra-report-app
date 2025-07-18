@@ -1,29 +1,15 @@
 // lib/app.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/navigator_key_provider.dart';
-import 'package:flutter_application_1/providers/notification_provider.dart';
-import 'package:flutter_application_1/providers/profile_provider.dart';
-import 'package:flutter_application_1/screens/notifications/notifications_screen.dart';
-import 'package:flutter_application_1/widgets/offline_banner.dart';
-import 'package:flutter_application_1/widgets/sync_banner.dart';
+import 'package:infra_report/providers/navigator_key_provider.dart';
+import 'package:infra_report/providers/notification_provider.dart';
+import 'package:infra_report/screens/notifications/notifications_screen.dart';
+import 'package:infra_report/widgets/offline_banner.dart';
+import 'package:infra_report/widgets/sync_banner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_1/providers/navigation_provider.dart';
-import 'package:flutter_application_1/screens/home/home_screen.dart';
-import 'package:flutter_application_1/screens/history/history_screen.dart';
-import 'package:flutter_application_1/screens/profile/profile_screen.dart';
-
-final MaterialColor primarySwatch = MaterialColor(0xFF34A85A, <int, Color>{
-  50: Color(0xFFE3F5EB),
-  100: Color(0xFFB9E5CA),
-  200: Color(0xFF8CD4A7),
-  300: Color(0xFF5FC284),
-  400: Color(0xFF3FB56A),
-  500: Color(0xFF34A85A), // primary
-  600: Color(0xFF2F9B52),
-  700: Color(0xFF288948),
-  800: Color(0xFF22773F),
-  900: Color(0xFF155A2E),
-});
+import 'package:infra_report/providers/navigation_provider.dart';
+import 'package:infra_report/screens/home/home_screen.dart';
+import 'package:infra_report/screens/history/history_screen.dart';
+import 'package:infra_report/screens/profile/profile_screen.dart';
 
 class MyApp extends ConsumerWidget {
   final ThemeData theme;

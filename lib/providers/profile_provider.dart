@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter_application_1/models/user_model.dart';
-import 'package:flutter_application_1/providers/api_service_provider.dart';
-import 'package:flutter_application_1/services/api_service.dart';
-import 'package:flutter_application_1/services/secure_storage_service.dart';
+import 'package:infra_report/models/user_model.dart';
+import 'package:infra_report/providers/api_service_provider.dart';
+import 'package:infra_report/services/api_service.dart';
+import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'profile_provider.g.dart';

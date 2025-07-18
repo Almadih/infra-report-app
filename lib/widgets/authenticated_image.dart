@@ -1,8 +1,8 @@
 // lib/widgets/authenticated_image.dart
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/image_cache_provider.dart';
-import 'package:flutter_application_1/services/image_cache_manager.dart';
+import 'package:infra_report/providers/image_cache_provider.dart';
+import 'package:infra_report/services/image_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthenticatedImage extends ConsumerStatefulWidget {

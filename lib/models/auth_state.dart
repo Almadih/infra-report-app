@@ -1,5 +1,5 @@
 // lib/models/auth_state.dart
-import 'package:flutter_application_1/models/user_model.dart';
+import 'package:infra_report/models/user_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'auth_state.freezed.dart';

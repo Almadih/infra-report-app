@@ -1,21 +1,18 @@
 // lib/main.dart
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/models/auth_state.dart';
-import 'package:flutter_application_1/providers/connectivity_provider.dart';
-import 'package:flutter_application_1/repositories/report_repository.dart';
-import 'package:flutter_application_1/providers/auth_provider.dart';
-import 'package:flutter_application_1/services/notification_service.dart';
-import 'package:flutter_application_1/utils/index.dart';
+import 'package:infra_report/models/auth_state.dart';
+import 'package:infra_report/providers/connectivity_provider.dart';
+import 'package:infra_report/repositories/report_repository.dart';
+import 'package:infra_report/providers/auth_provider.dart';
+import 'package:infra_report/services/notification_service.dart';
+import 'package:infra_report/utils/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_1/app.dart'; // Import provider
-import 'package:flutter_application_1/screens/onboarding/onboarding_screen.dart';
-import 'package:json_theme/json_theme.dart'; // Import onboarding screen
+import 'package:infra_report/app.dart'; // Import provider
+import 'package:infra_report/screens/onboarding/onboarding_screen.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

@@ -1,6 +1,8 @@
 // lib/services/dio_interceptor.dart
 import 'package:dio/dio.dart';
-import 'package:flutter_application_1/services/secure_storage_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infra_report/providers/auth_provider.dart';
+import 'package:infra_report/services/secure_storage_service.dart';
 
 class AuthInterceptor extends Interceptor {
   final SecureStorageService _storageService;
@@ -46,7 +48,10 @@ class AuthInterceptor extends Interceptor {
       // For now, we can just print a message.
       print('AUTH ERROR: Received 401 Unauthorized. Token might be invalid.');
       // You could call a logout method from your Auth provider here.
-      // Example: ref.read(authProvider.notifier).logout();
+      // final ref =
+      final container = ProviderContainer();
+
+      container.read(authProvider.notifier).logout();
     }
     super.onError(err, handler);
   }

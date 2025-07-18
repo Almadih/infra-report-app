@@ -1,6 +1,6 @@
 // lib/providers/damage_type_provider.dart
-import 'package:flutter_application_1/models/report_model.dart';
-import 'package:flutter_application_1/repositories/report_repository.dart';
+import 'package:infra_report/models/report_model.dart';
+import 'package:infra_report/repositories/report_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'damage_type_provider.g.dart';

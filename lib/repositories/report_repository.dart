@@ -5,19 +5,19 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/database/database.dart';
-import 'package:flutter_application_1/providers/api_service_provider.dart';
-import 'package:flutter_application_1/providers/home_map_data_provider.dart';
-import 'package:flutter_application_1/providers/my_reports_provider.dart';
-import 'package:flutter_application_1/providers/report_provider.dart';
-import 'package:flutter_application_1/providers/sync_provider.dart';
+import 'package:infra_report/database/database.dart';
+import 'package:infra_report/providers/api_service_provider.dart';
+import 'package:infra_report/providers/home_map_data_provider.dart';
+import 'package:infra_report/providers/my_reports_provider.dart';
+import 'package:infra_report/providers/report_provider.dart';
+import 'package:infra_report/providers/sync_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_application_1/models/report_model.dart' as app_models;
-import 'package:flutter_application_1/services/api_service.dart';
-import 'package:flutter_application_1/providers/database_provider.dart';
-import 'package:flutter_application_1/providers/connectivity_provider.dart';
+import 'package:infra_report/models/report_model.dart' as app_models;
+import 'package:infra_report/services/api_service.dart';
+import 'package:infra_report/providers/database_provider.dart';
+import 'package:infra_report/providers/connectivity_provider.dart';
 import 'package:uuid/uuid.dart';
 
 part 'report_repository.g.dart';
@@ -182,61 +182,6 @@ class ReportRepository {
           ),
         );
   }
-
-  // --- NEW: METHOD TO PROCESS THE OFFLINE QUEUE ---
-  // Future<void> processPendingQueue() async {
-  //   if (!_isOnline) return;
-
-  //   final pending = await _db.pendingReports.select().get();
-  //   if (pending.isEmpty) return;
-
-  //   print("Processing ${pending.length} pending reports...");
-
-  //   for (final report in pending) {
-  //     // Prevent re-syncing if already in progress
-  //     if (report.isSyncing) continue;
-
-  //     try {
-  //       // Mark as syncing in the DB
-  //       await (_db.pendingReports.update()
-  //             ..where((t) => t.id.equals(report.id)))
-  //           .write(const PendingReportsCompanion(isSyncing: Value(true)));
-
-  //       // Reconstruct the submission data
-  //       final imagePaths = (jsonDecode(report.imagePaths) as List)
-  //           .cast<String>();
-  //       final imageFiles = imagePaths.map((path) => File(path)).toList();
-
-  //       // Use the same submission method
-  //       await submitReport(
-  //         images: imageFiles,
-  //         latitude: report.latitude,
-  //         longitude: report.longitude,
-  //         damageTypeId: report.damageTypeId,
-  //         severityId: report.severityId,
-  //         description: report.description,
-  //         city: report.city,
-  //         address: report.address,
-  //       );
-
-  //       // If successful, delete from the queue
-  //       await (_db.pendingReports.delete()
-  //             ..where((t) => t.id.equals(report.id)))
-  //           .go();
-  //       print("Successfully synced report with UUID: ${report.uuid}");
-  //       _ref.invalidate(reportsProvider);
-  //       _ref.invalidate(homeMapDataProvider);
-  //     } catch (e) {
-  //       print(
-  //         "Failed to sync report with UUID ${report.uuid}. Will retry later. Error: $e",
-  //       );
-  //       // If failed, unmark as syncing so it can be picked up again
-  //       await (_db.pendingReports.update()
-  //             ..where((t) => t.id.equals(report.id)))
-  //           .write(const PendingReportsCompanion(isSyncing: Value(false)));
-  //     }
-  //   }
-  // }
 
   Future<void> processPendingQueue(WidgetRef ref) async {
     if (!_isOnline) return;

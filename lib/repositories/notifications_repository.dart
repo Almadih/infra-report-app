@@ -1,9 +1,9 @@
-import 'package:flutter_application_1/database/database.dart';
-import 'package:flutter_application_1/models/notification_model.dart';
-import 'package:flutter_application_1/providers/api_service_provider.dart';
-import 'package:flutter_application_1/providers/connectivity_provider.dart';
-import 'package:flutter_application_1/providers/database_provider.dart';
-import 'package:flutter_application_1/services/api_service.dart';
+import 'package:infra_report/database/database.dart';
+import 'package:infra_report/models/notification_model.dart';
+import 'package:infra_report/providers/api_service_provider.dart';
+import 'package:infra_report/providers/connectivity_provider.dart';
+import 'package:infra_report/providers/database_provider.dart';
+import 'package:infra_report/services/api_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'notifications_repository.g.dart';

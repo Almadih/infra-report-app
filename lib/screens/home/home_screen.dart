@@ -1,19 +1,19 @@
 // lib/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for AnnotatedRegion
-import 'package:flutter_application_1/config/google_map_style.dart';
-import 'package:flutter_application_1/providers/auth_provider.dart';
-import 'package:flutter_application_1/providers/home_map_data_provider.dart';
-import 'package:flutter_application_1/providers/location_provider.dart';
-import 'package:flutter_application_1/providers/map_controller_provider.dart';
-import 'package:flutter_application_1/repositories/report_repository.dart';
-import 'package:flutter_application_1/screens/create_report/create_report_screen.dart';
-import 'package:flutter_application_1/screens/home/widgets/map_report_card.dart';
-import 'package:flutter_application_1/utils/exceptions.dart';
-import 'package:flutter_application_1/utils/location_dialog_helper.dart';
+import 'package:infra_report/config/google_map_style.dart';
+import 'package:infra_report/providers/database_provider.dart';
+import 'package:infra_report/providers/home_map_data_provider.dart';
+import 'package:infra_report/providers/location_provider.dart';
+import 'package:infra_report/providers/map_controller_provider.dart';
+import 'package:infra_report/repositories/report_repository.dart';
+import 'package:infra_report/screens/create_report/create_report_screen.dart';
+import 'package:infra_report/screens/home/widgets/map_report_card.dart';
+import 'package:infra_report/utils/exceptions.dart';
+import 'package:infra_report/utils/location_dialog_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_application_1/models/report_model.dart' as app_models;
+import 'package:infra_report/models/report_model.dart' as app_models;
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -53,7 +53,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
 
       // Explicitly trigger a refresh of reports for the new location.
-      // await ref.read(reportRepositoryProvider).forceRefreshReports(position);
       ref.invalidate(reportRepositoryProvider);
     } finally {
       if (mounted) {
@@ -81,7 +80,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
 
     final homeMapAsyncValue = ref.watch(homeMapDataProvider);
-    final reportsRepo = ref.watch(reportRepositoryProvider);
     // Decide status bar icon brightness.
     // If your map style is predominantly light, use dark icons.
     // If your map style can be dark, you might want Brightness.light for icons.
@@ -307,8 +305,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
                       onPressed: () {
-                        // Invalidate the provider to try again.
-                        // ref.invalidate(homeMapDataProvider);
                         _centerOnUserAndRefresh();
                       },
                       icon: const Icon(Icons.refresh),

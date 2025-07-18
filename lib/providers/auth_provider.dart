@@ -2,14 +2,15 @@
 
 import 'dart:convert';
 
-import 'package:flutter_application_1/models/auth_state.dart';
-import 'package:flutter_application_1/models/user_model.dart';
-import 'package:flutter_application_1/providers/api_service_provider.dart';
-import 'package:flutter_application_1/providers/image_cache_provider.dart';
-import 'package:flutter_application_1/providers/profile_provider.dart';
-import 'package:flutter_application_1/providers/report_provider.dart';
-import 'package:flutter_application_1/services/api_service.dart';
-import 'package:flutter_application_1/services/secure_storage_service.dart';
+import 'package:infra_report/models/auth_state.dart';
+import 'package:infra_report/models/user_model.dart';
+import 'package:infra_report/providers/api_service_provider.dart';
+import 'package:infra_report/providers/database_provider.dart';
+import 'package:infra_report/providers/image_cache_provider.dart';
+import 'package:infra_report/providers/profile_provider.dart';
+import 'package:infra_report/providers/report_provider.dart';
+import 'package:infra_report/services/api_service.dart';
+import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:crypto/crypto.dart';
@@ -29,14 +30,15 @@ class Auth extends _$Auth {
     // Check storage for existing token and user data
     final token = await _storageService.read(SecureStorageService.tokenKey);
     // final user = await _storageService.read(SecureStorageService.userKey);
-    final user = await _apiService.fetchProfile();
-
-    await _storageService.write(
-      SecureStorageService.userKey,
-      jsonEncode(user.toJson()),
-    );
 
     if (token != null) {
+      final user = await _apiService.fetchProfile();
+      print("user profile $user");
+
+      await _storageService.write(
+        SecureStorageService.userKey,
+        jsonEncode(user.toJson()),
+      );
       return AuthState.authenticated(user: user, token: token);
     }
 
@@ -98,6 +100,7 @@ class Auth extends _$Auth {
     await _storageService.delete(SecureStorageService.userKey);
     await _storageService.delete(SecureStorageService.tokenKey);
     await _storageService.delete(SecureStorageService.fcmTokenKey);
+    await ref.read(appDatabaseProvider).deleteEverything();
     state = const AsyncData(AuthState.unauthenticated());
     // Also clear image cache on logout for privacy
     ref.read(imageCacheManagerProvider).emptyCache();

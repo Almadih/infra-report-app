@@ -1,11 +1,11 @@
 // lib/screens/notifications/notifications_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/notification_model.dart';
-import 'package:flutter_application_1/providers/api_service_provider.dart';
-import 'package:flutter_application_1/providers/notification_provider.dart';
-import 'package:flutter_application_1/providers/report_provider.dart';
-import 'package:flutter_application_1/repositories/report_repository.dart';
-import 'package:flutter_application_1/screens/report_details/report_details_screen.dart';
+import 'package:infra_report/models/notification_model.dart';
+import 'package:infra_report/providers/api_service_provider.dart';
+import 'package:infra_report/providers/notification_provider.dart';
+import 'package:infra_report/providers/report_provider.dart';
+import 'package:infra_report/repositories/report_repository.dart';
+import 'package:infra_report/screens/report_details/report_details_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 

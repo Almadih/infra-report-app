@@ -5,12 +5,12 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/connectivity_provider.dart';
-import 'package:flutter_application_1/providers/home_map_data_provider.dart';
-import 'package:flutter_application_1/providers/location_provider.dart';
-import 'package:flutter_application_1/repositories/report_repository.dart';
-import 'package:flutter_application_1/utils/index.dart';
-import 'package:flutter_application_1/widgets/success_dialog.dart';
+import 'package:infra_report/providers/connectivity_provider.dart';
+import 'package:infra_report/providers/home_map_data_provider.dart';
+import 'package:infra_report/providers/location_provider.dart';
+import 'package:infra_report/repositories/report_repository.dart';
+import 'package:infra_report/utils/index.dart';
+import 'package:infra_report/widgets/success_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,12 +18,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:flutter_application_1/models/report_model.dart'
+import 'package:infra_report/models/report_model.dart'
     as app_models; // Alias to avoid conflict
-import 'package:flutter_application_1/providers/damage_type_provider.dart';
-import 'package:flutter_application_1/providers/severity_provider.dart';
-import 'package:flutter_application_1/screens/create_report/map_location_selector_page.dart';
-import 'package:flutter_application_1/screens/create_report/widgets/image_picker_input.dart';
+import 'package:infra_report/providers/damage_type_provider.dart';
+import 'package:infra_report/providers/severity_provider.dart';
+import 'package:infra_report/screens/create_report/map_location_selector_page.dart';
+import 'package:infra_report/screens/create_report/widgets/image_picker_input.dart';
 
 // Helper to get location permission status
 Future<bool> _requestLocationPermission() async {
@@ -458,7 +458,6 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
               _isSubmitting = false;
             });
             ref.invalidate(reportRepositoryProvider);
-            ref.invalidate(homeMapDataProvider);
             await showSuccessDialog(
               context: context,
               title: 'Report Submitted!',

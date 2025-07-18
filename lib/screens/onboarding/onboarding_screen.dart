@@ -1,10 +1,10 @@
 // lib/screens/onboarding/onboarding_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/auth_provider.dart';
+import 'package:infra_report/providers/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_1/models/onboarding_item_model.dart';
-import 'package:flutter_application_1/app.dart'; // To navigate to MyApp
+import 'package:infra_report/models/onboarding_item_model.dart';
+import 'package:infra_report/app.dart'; // To navigate to MyApp
 import 'package:scaffold_gradient_background/scaffold_gradient_background.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -102,7 +102,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = widget.theme;
     return ScaffoldGradientBackground(
       // backgroundColor: Colors.green, // Or a custom onboarding background
       gradient: LinearGradient(
@@ -193,7 +193,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
-                  backgroundColor: primarySwatch.shade500,
+                  backgroundColor: theme.colorScheme.primary,
                   foregroundColor: theme.colorScheme.onPrimary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),

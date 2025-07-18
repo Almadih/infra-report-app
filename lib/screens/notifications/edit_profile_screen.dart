@@ -1,8 +1,8 @@
 // lib/screens/profile/edit_profile_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/user_model.dart';
-import 'package:flutter_application_1/providers/auth_provider.dart';
-import 'package:flutter_application_1/providers/profile_provider.dart';
+import 'package:infra_report/models/user_model.dart';
+import 'package:infra_report/providers/auth_provider.dart';
+import 'package:infra_report/providers/profile_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {

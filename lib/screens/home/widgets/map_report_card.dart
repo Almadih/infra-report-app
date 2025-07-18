@@ -1,9 +1,9 @@
 // lib/screens/home/widgets/map_report_card.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/report_model.dart' as app_models;
-import 'package:flutter_application_1/screens/history/widgets/status_badge.dart';
-import 'package:flutter_application_1/screens/report_details/report_details_screen.dart';
-import 'package:flutter_application_1/widgets/authenticated_image.dart';
+import 'package:infra_report/models/report_model.dart' as app_models;
+import 'package:infra_report/screens/history/widgets/status_badge.dart';
+import 'package:infra_report/screens/report_details/report_details_screen.dart';
+import 'package:infra_report/widgets/authenticated_image.dart';
 import 'package:intl/intl.dart';
 
 class MapReportCard extends StatelessWidget {

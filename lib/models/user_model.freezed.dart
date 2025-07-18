@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$User {
 
- int get id; String get name; String get email; int get reputation;@JsonKey(name: 'show_info_to_public') bool get isPublic;
+ int get id; String get name; String get email; int get reputation;@JsonKey(name: 'reputation_title') String get reputationTitle;@JsonKey(name: 'show_info_to_public') bool get isPublic;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $UserCopyWith<User> get copyWith => _$UserCopyWithImpl<User>(this as User, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.reputation, reputation) || other.reputation == reputation)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.reputation, reputation) || other.reputation == reputation)&&(identical(other.reputationTitle, reputationTitle) || other.reputationTitle == reputationTitle)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,email,reputation,isPublic);
+int get hashCode => Object.hash(runtimeType,id,name,email,reputation,reputationTitle,isPublic);
 
 @override
 String toString() {
-  return 'User(id: $id, name: $name, email: $email, reputation: $reputation, isPublic: $isPublic)';
+  return 'User(id: $id, name: $name, email: $email, reputation: $reputation, reputationTitle: $reputationTitle, isPublic: $isPublic)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $UserCopyWith<$Res>  {
   factory $UserCopyWith(User value, $Res Function(User) _then) = _$UserCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String email, int reputation,@JsonKey(name: 'show_info_to_public') bool isPublic
+ int id, String name, String email, int reputation,@JsonKey(name: 'reputation_title') String reputationTitle,@JsonKey(name: 'show_info_to_public') bool isPublic
 });
 
 
@@ -66,13 +66,14 @@ class _$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? email = null,Object? reputation = null,Object? isPublic = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? email = null,Object? reputation = null,Object? reputationTitle = null,Object? isPublic = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,reputation: null == reputation ? _self.reputation : reputation // ignore: cast_nullable_to_non_nullable
-as int,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
+as int,reputationTitle: null == reputationTitle ? _self.reputationTitle : reputationTitle // ignore: cast_nullable_to_non_nullable
+as String,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -84,13 +85,14 @@ as bool,
 @JsonSerializable()
 
 class _User implements User {
-  const _User({required this.id, required this.name, required this.email, required this.reputation, @JsonKey(name: 'show_info_to_public') required this.isPublic});
+  const _User({required this.id, required this.name, required this.email, required this.reputation, @JsonKey(name: 'reputation_title') required this.reputationTitle, @JsonKey(name: 'show_info_to_public') required this.isPublic});
   factory _User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
 @override final  int id;
 @override final  String name;
 @override final  String email;
 @override final  int reputation;
+@override@JsonKey(name: 'reputation_title') final  String reputationTitle;
 @override@JsonKey(name: 'show_info_to_public') final  bool isPublic;
 
 /// Create a copy of User
@@ -106,16 +108,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.reputation, reputation) || other.reputation == reputation)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.reputation, reputation) || other.reputation == reputation)&&(identical(other.reputationTitle, reputationTitle) || other.reputationTitle == reputationTitle)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,email,reputation,isPublic);
+int get hashCode => Object.hash(runtimeType,id,name,email,reputation,reputationTitle,isPublic);
 
 @override
 String toString() {
-  return 'User(id: $id, name: $name, email: $email, reputation: $reputation, isPublic: $isPublic)';
+  return 'User(id: $id, name: $name, email: $email, reputation: $reputation, reputationTitle: $reputationTitle, isPublic: $isPublic)';
 }
 
 
@@ -126,7 +128,7 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) _then) = __$UserCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String email, int reputation,@JsonKey(name: 'show_info_to_public') bool isPublic
+ int id, String name, String email, int reputation,@JsonKey(name: 'reputation_title') String reputationTitle,@JsonKey(name: 'show_info_to_public') bool isPublic
 });
 
 
@@ -143,13 +145,14 @@ class __$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? email = null,Object? reputation = null,Object? isPublic = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? email = null,Object? reputation = null,Object? reputationTitle = null,Object? isPublic = null,}) {
   return _then(_User(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,reputation: null == reputation ? _self.reputation : reputation // ignore: cast_nullable_to_non_nullable
-as int,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
+as int,reputationTitle: null == reputationTitle ? _self.reputationTitle : reputationTitle // ignore: cast_nullable_to_non_nullable
+as String,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

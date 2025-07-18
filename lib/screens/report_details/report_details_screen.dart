@@ -1,14 +1,14 @@
 // lib/screens/report_details/report_details_screen.dart
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_application_1/models/report_model.dart' as app_models;
-import 'package:flutter_application_1/screens/report_details/widgets/report_flag_card.dart';
-import 'package:flutter_application_1/screens/report_details/widgets/report_owner_card.dart';
-import 'package:flutter_application_1/screens/report_details/widgets/report_update_tile.dart';
-import 'package:flutter_application_1/widgets/authenticated_image.dart';
-import 'package:flutter_application_1/screens/history/widgets/severity_badge.dart';
-import 'package:flutter_application_1/screens/report_details/widgets/fullscreen_image_viewer.dart';
-import 'package:flutter_application_1/screens/report_details/widgets/status_stepper.dart';
+import 'package:infra_report/models/report_model.dart' as app_models;
+import 'package:infra_report/screens/report_details/widgets/report_flag_card.dart';
+import 'package:infra_report/screens/report_details/widgets/report_owner_card.dart';
+import 'package:infra_report/screens/report_details/widgets/report_update_tile.dart';
+import 'package:infra_report/widgets/authenticated_image.dart';
+import 'package:infra_report/screens/history/widgets/severity_badge.dart';
+import 'package:infra_report/screens/report_details/widgets/fullscreen_image_viewer.dart';
+import 'package:infra_report/screens/report_details/widgets/status_stepper.dart';
 import 'package:intl/intl.dart';
 
 class ReportDetailsScreen extends StatefulWidget {

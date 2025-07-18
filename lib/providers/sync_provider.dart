@@ -1,7 +1,7 @@
 // lib/providers/sync_provider.dart
 import 'dart:async';
-import 'package:flutter_application_1/models/sync_status.dart';
-import 'package:flutter_application_1/providers/database_provider.dart';
+import 'package:infra_report/models/sync_status.dart';
+import 'package:infra_report/providers/database_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sync_provider.g.dart';
