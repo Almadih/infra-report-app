@@ -129,24 +129,21 @@ class MapReportCard extends StatelessWidget {
             ),
           ),
           // Bottom navigation bar
-          Container(
-            color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: hasPrevious ? onPrevious : null,
-                  icon: const Icon(Icons.arrow_back_ios_new),
-                  tooltip: 'Previous Report',
-                ),
-                Flexible(child: StatusBadge(statusName: report.status.name)),
-                IconButton(
-                  onPressed: hasNext ? onNext : null,
-                  icon: const Icon(Icons.arrow_forward_ios),
-                  tooltip: 'Next Report',
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                onPressed: hasPrevious ? onPrevious : null,
+                icon: const Icon(Icons.arrow_back_ios_new),
+                tooltip: 'Previous Report',
+              ),
+              Flexible(child: StatusBadge(statusName: report.status.name)),
+              IconButton(
+                onPressed: hasNext ? onNext : null,
+                icon: const Icon(Icons.arrow_forward_ios),
+                tooltip: 'Next Report',
+              ),
+            ],
           ),
         ],
       ),

@@ -1,53 +1,42 @@
 // lib/screens/history/widgets/severity_badge.dart
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SeverityBadge extends StatelessWidget {
   final String severityName;
 
   const SeverityBadge({super.key, required this.severityName});
 
-  Color _getBadgeColor(String severity) {
+  Color _getColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'low':
-        return Colors.green.shade400;
+        return Colors.green;
       case 'medium':
-        return Colors.yellow.shade700;
+        return Colors.orange;
       case 'high':
-        return Colors.orange.shade600;
+        return Colors.red;
       case 'critical':
-        return Colors.red.shade600;
+        return Colors.purple;
       default:
-        return Colors.grey.shade400;
-    }
-  }
-
-  Color _getTextColor(String severity) {
-    switch (severity.toLowerCase()) {
-      case 'low':
-      case 'medium':
-        return Colors.black87;
-      case 'high':
-      case 'critical':
-        return Colors.white;
-      default:
-        return Colors.black87;
+        return Colors.grey;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: _getBadgeColor(severityName),
-        borderRadius: BorderRadius.circular(12.0),
+        color: _getColor(severityName).withValues(alpha: .1),
+        border: Border.all(color: _getColor(severityName), width: 1),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        severityName.toUpperCase(),
+        toBeginningOfSentenceCase(severityName),
         style: TextStyle(
-          color: _getTextColor(severityName),
-          fontSize: 10,
+          color: _getColor(severityName),
           fontWeight: FontWeight.bold,
+          fontSize: 12,
         ),
       ),
     );

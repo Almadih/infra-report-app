@@ -28,7 +28,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2; // Increment this when you change tables
+  int get schemaVersion => 3; // Increment this when you change tables
 
   @override
   MigrationStrategy get migration {

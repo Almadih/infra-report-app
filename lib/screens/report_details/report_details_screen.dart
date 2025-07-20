@@ -196,8 +196,10 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
                         (Theme.of(context).brightness == Brightness.dark
                                 ? Colors.white
                                 : Colors.black)
-                            .withOpacity(
-                              _currentImageIndex == entry.key ? 0.9 : 0.4,
+                            .withValues(
+                              alpha: _currentImageIndex == entry.key
+                                  ? 0.9
+                                  : 0.4,
                             ),
                   ),
                 ),
@@ -256,7 +258,7 @@ class _ReportDetailsScreenState extends State<ReportDetailsScreen> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                theme.colorScheme.primary.withOpacity(0.1),
+                theme.colorScheme.primary.withValues(alpha: 0.1),
                 theme.scaffoldBackgroundColor,
               ],
               begin: Alignment.topCenter,

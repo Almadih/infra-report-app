@@ -7,47 +7,36 @@ class StatusBadge extends StatelessWidget {
 
   const StatusBadge({super.key, required this.statusName});
 
-  Color _getBadgeColor(String status) {
+  Color _getColor(String status) {
     switch (status.toLowerCase()) {
       case 'pending':
-        return Colors.yellow.shade300;
-      case 'verified':
-        return Colors.blue.shade300;
-      case 'under_review': // Handle potential variations
-        return Colors.red.shade300;
-      case 'resolved':
-        return Colors.green.shade500;
-      default:
-        return Colors.grey.shade400;
-    }
-  }
-
-  Color _getTextColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'pending':
-      case 'verified':
+        return Colors.orange; // Pending
       case 'under_review':
+        return Colors.grey; // Under Review
+      case 'verified':
+        return Colors.blue; // Verified
       case 'resolved':
-        return Colors.white; // Light text for darker badges
+        return Colors.green; // Resolved
       default:
-        return Colors.black87;
+        return Colors.grey; // Default
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: _getBadgeColor(statusName),
-        borderRadius: BorderRadius.circular(12.0),
+        color: _getColor(statusName).withValues(alpha: .1),
+        border: Border.all(color: _getColor(statusName), width: 1),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        toBeginningOfSentenceCase(statusName.replaceAll("_", " ")),
+        toBeginningOfSentenceCase(statusName.replaceAll('_', ' ')),
         style: TextStyle(
-          color: _getTextColor(statusName),
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
+          color: _getColor(statusName),
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
         ),
       ),
     );

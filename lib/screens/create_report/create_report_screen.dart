@@ -16,6 +16,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:infra_report/models/report_model.dart'
@@ -313,10 +314,10 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
   Widget _buildSeveritySelector(List<app_models.Severity> severities) {
     // Map severity names to colors
     Map<String, Color> severityColors = {
-      "low": Colors.green.shade300,
-      "medium": Colors.yellow.shade600,
-      "high": Colors.orange.shade700,
-      "critical": Colors.red.shade700,
+      "low": Colors.green.shade600,
+      "medium": Colors.orange.shade600,
+      "high": Colors.red.shade600,
+      "critical": Colors.purple.shade600,
     };
 
     return Column(
@@ -334,7 +335,7 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
               final severity = severities[index];
               bool isSelected = _selectedSeverityId == severity.id;
               return ChoiceChip(
-                label: Text(severity.name),
+                label: Text(toBeginningOfSentenceCase(severity.name)),
                 selected: isSelected,
                 onSelected: (selected) {
                   setState(() {
@@ -342,8 +343,8 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
                   });
                 },
                 backgroundColor:
-                    severityColors[severity.name.toLowerCase()]?.withOpacity(
-                      0.2,
+                    severityColors[severity.name.toLowerCase()]?.withValues(
+                      alpha: .2,
                     ) ??
                     Colors.grey.shade200,
                 selectedColor:
@@ -559,7 +560,7 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
               ),
               const SizedBox(height: 20),
               const Text(
-                'Description (Optional)',
+                'Description*',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               TextFormField(
@@ -570,6 +571,17 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
                 maxLines: 3,
                 onSaved: (value) => _description = value ?? '',
               ),
+              if (_description == '' && _formSubmittedOnce)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    'Please provide a description.',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _submitReport,
