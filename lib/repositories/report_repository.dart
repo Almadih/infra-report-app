@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter/material.dart';
 import 'package:infra_report/database/database.dart';
 import 'package:infra_report/providers/api_service_provider.dart';
 import 'package:infra_report/providers/home_map_data_provider.dart';
@@ -13,6 +12,7 @@ import 'package:infra_report/providers/report_provider.dart';
 import 'package:infra_report/providers/sync_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:infra_report/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:infra_report/models/report_model.dart' as app_models;
 import 'package:infra_report/services/api_service.dart';
@@ -35,20 +35,20 @@ class ReportRepository {
 
   Future<void> syncReportsWithApi(Position? userPosition) async {
     if (!_isOnline) {
-      print("Sync skipped: offline.");
+      log.info("Sync skipped: offline.");
       return; // Do nothing if offline
     }
     if (userPosition == null) {
-      print("Sync skipped: no user position.");
+      log.info("Sync skipped: no user position.");
       return;
     }
 
     try {
       final apiReports = await _apiService.fetchReports(location: userPosition);
       await _db.cacheApiReports(apiReports);
-      print("Successfully synced reports with API.");
+      log.info("Successfully synced reports with API.");
     } catch (e) {
-      print("Failed to sync reports with API: $e");
+      log.warning("Failed to sync reports with API: $e");
       // Don't rethrow, as we don't want to crash the app if a background sync fails.
       // The UI will just show the old cached data.
     }
@@ -73,7 +73,6 @@ class ReportRepository {
   }
 
   Stream<List<app_models.Report>> watchMyReports() {
-    print("isonline $_isOnline");
     if (_isOnline) {
       // Fetch from network and update DB in the background.
       // The UI will react to DB changes automatically.
@@ -83,7 +82,7 @@ class ReportRepository {
             _db.cacheApiMyReports(apiReports);
           })
           .catchError((e, s) {
-            print("Failed to sync reports: $e");
+            log.warning("Failed to sync reports: $e");
           });
     }
     // Always return the stream from the local DB as the source of truth.
@@ -92,9 +91,7 @@ class ReportRepository {
 
   Future<void> forceRefreshMyReports() async {
     if (_isOnline) {
-      print("forceRefreshMyReports");
       final apiReports = await _apiService.fetchMyReports();
-      print(apiReports.first.flags);
       await _db.cacheApiMyReports(apiReports);
     } else {
       throw Exception("Cannot refresh while offline.");
@@ -187,7 +184,7 @@ class ReportRepository {
     if (!_isOnline) return;
 
     final pendingReports = await _db.getQueuedReports();
-    print("pending queue ${pendingReports.length} reports");
+    log.info("pending queue ${pendingReports.length} reports");
     if (pendingReports.isEmpty) return;
 
     // Get the sync notifier
@@ -203,7 +200,7 @@ class ReportRepository {
           const PendingReportsCompanion(isSyncing: Value(true)),
         );
 
-        print("pending queue processing ${report.id}");
+        log.info("pending queue processing ${report.id}");
 
         // ... reconstruct form data ...
         final imagePaths = (jsonDecode(report.imagePaths) as List)
@@ -221,7 +218,7 @@ class ReportRepository {
         );
 
         await _db.deletePendingReport(report.id);
-        print(
+        log.info(
           "pending queue Successfully synced report with UUID: ${report.uuid}",
         );
 
@@ -232,7 +229,7 @@ class ReportRepository {
         // Report a successful sync for one item
         syncNotifier.reportSuccess();
       } catch (e) {
-        print(
+        log.info(
           "pending queue Failed to sync report with UUID ${report.uuid}. Error: $e",
         );
         await _db.updatePendingReport(
@@ -250,7 +247,6 @@ class ReportRepository {
 
   Future<int> getPendingReportsCount() async {
     final pending = await _db.pendingReports.select().get();
-    print(pending);
     return pending.length;
   }
 }

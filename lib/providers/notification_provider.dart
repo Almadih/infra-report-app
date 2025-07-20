@@ -1,6 +1,5 @@
 // lib/providers/notification_provider.dart
 import 'package:infra_report/models/notification_model.dart';
-import 'package:infra_report/providers/api_service_provider.dart';
 import 'package:infra_report/repositories/notifications_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

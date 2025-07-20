@@ -3,6 +3,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:infra_report/config/api_config.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:infra_report/utils/logger.dart';
 
 /// Custom implementation of a FileService to fetch images using a Dio client.
 /// This allows us to use an authenticated client for fetching protected images.
@@ -31,7 +32,7 @@ class DioFileService extends FileService {
         options: dio.Options(responseType: dio.ResponseType.bytes),
       );
 
-      print(
+      log.info(
         "[DioFileService] Successfully fetched ${response.data.length} bytes for $apiPath",
       );
 
@@ -52,7 +53,7 @@ class DioFileService extends FileService {
 
       return HttpGetResponse(streamedResponse);
     } on dio.DioException catch (e) {
-      print("[DioFileService] DioException occurred: ${e.message}");
+      log.warning("[DioFileService] DioException occurred: ${e.message}");
       final streamedResponse = http.StreamedResponse(
         const Stream.empty(),
         e.response?.statusCode ?? 500,

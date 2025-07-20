@@ -19,7 +19,6 @@ Future<HomeMapData> homeMapData(ref) async {
   // We do NOT await this. We kick it off and let it run in the background.
   // The UI will update reactively when the sync completes and writes to the DB.
   await repository.syncReportsWithApi(userPosition);
-  print("home map data sync");
 
   // 4. Await the first value from the pure database stream.
   final reports = await repository.watchReports().first;

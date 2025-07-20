@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:infra_report/services/image_cache_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:infra_report/utils/logger.dart';
 
 /// This is the single, global instance of our custom cache manager.
 /// By defining it as a top-level final variable, we ensure it's created only once.
@@ -23,6 +24,6 @@ class AppCacheManager extends CacheManager with ImageCacheManager {
         fileService: DioFileService(dio), // Use our custom file service
       ),
     );
-    print("[AppCacheManager] Initialized with key: $key");
+    log.info("[AppCacheManager] Initialized with key: $key");
   }
 }

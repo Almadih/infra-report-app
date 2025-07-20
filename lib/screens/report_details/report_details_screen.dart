@@ -21,8 +21,6 @@ class ReportDetailsScreen extends StatefulWidget {
 }
 
 Widget _buildUserSection(BuildContext context, app_models.Report report) {
-  final theme = Theme.of(context);
-
   if (report.user == null) {
     return const SizedBox.shrink();
   }
@@ -75,7 +73,6 @@ Widget _buildUpdatesSection(BuildContext context, app_models.Report report) {
 
 Widget _buildFlagsSection(BuildContext context, app_models.Report report) {
   final theme = Theme.of(context);
-  print("flags section : ${report.flags.length}");
   // --- CONDITIONAL RENDERING ---
   // If there are no flags, return an empty widget to hide the section.
   if (report.flags.isEmpty) {

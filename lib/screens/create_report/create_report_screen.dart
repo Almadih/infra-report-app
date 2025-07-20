@@ -3,21 +3,18 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:infra_report/providers/connectivity_provider.dart';
-import 'package:infra_report/providers/home_map_data_provider.dart';
 import 'package:infra_report/providers/location_provider.dart';
 import 'package:infra_report/repositories/report_repository.dart';
 import 'package:infra_report/utils/index.dart';
+import 'package:infra_report/utils/logger.dart';
 import 'package:infra_report/widgets/success_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'package:infra_report/models/report_model.dart'
     as app_models; // Alias to avoid conflict
@@ -25,15 +22,6 @@ import 'package:infra_report/providers/damage_type_provider.dart';
 import 'package:infra_report/providers/severity_provider.dart';
 import 'package:infra_report/screens/create_report/map_location_selector_page.dart';
 import 'package:infra_report/screens/create_report/widgets/image_picker_input.dart';
-
-// Helper to get location permission status
-Future<bool> _requestLocationPermission() async {
-  var status = await Permission.location.status;
-  if (status.isDenied || status.isPermanentlyDenied) {
-    status = await Permission.location.request();
-  }
-  return status.isGranted;
-}
 
 class CreateReportScreen extends ConsumerStatefulWidget {
   const CreateReportScreen({super.key});
@@ -50,7 +38,7 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ImagePickerInputState> _imagePickerKey =
       GlobalKey<ImagePickerInputState>();
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
 
   List<XFile> _selectedImages = [];
   LatLng? _selectedLocation;
@@ -411,14 +399,14 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
 
       _formKey.currentState!.save();
       // Implement actual report submission logic here
-      print('Submitting Report:');
-      print('Images: ${_selectedImages.map((e) => e.path).toList()}');
-      print(
+      log.info('Submitting Report:');
+      log.info('Images: ${_selectedImages.map((e) => e.path).toList()}');
+      log.info(
         'Location: ${_selectedLocation?.latitude}, ${_selectedLocation?.longitude}',
       );
-      print('Damage Type ID: $_selectedDamageTypeId');
-      print('Severity ID: $_selectedSeverityId');
-      print('Description: $_description');
+      log.info('Damage Type ID: $_selectedDamageTypeId');
+      log.info('Severity ID: $_selectedSeverityId');
+      log.info('Description: $_description');
 
       List<Placemark> placeMarks = await placemarkFromCoordinates(
         _selectedLocation!.latitude,
@@ -499,10 +487,10 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
         // Invalidate providers to refresh data on home/history screens
       } catch (e) {
         if (mounted) {
-          print(e);
+          log.warning(e);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Submission Failed: ${e.toString()}'),
+              content: Text('Report Submission Failed'),
               backgroundColor: Colors.red,
             ),
           );

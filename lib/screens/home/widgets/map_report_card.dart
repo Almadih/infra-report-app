@@ -28,7 +28,6 @@ class MapReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("report card $report");
     final theme = Theme.of(context);
     final int? firstImageId = report.images.isNotEmpty
         ? report.images.first.id

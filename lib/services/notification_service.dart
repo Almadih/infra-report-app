@@ -1,21 +1,17 @@
 // lib/services/notification_service.dart
 import 'dart:async';
-import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:infra_report/main.dart';
 import 'package:infra_report/providers/api_service_provider.dart';
-import 'package:infra_report/providers/dio_provider.dart';
 import 'package:infra_report/providers/navigator_key_provider.dart';
 import 'package:infra_report/providers/notification_provider.dart';
-import 'package:infra_report/providers/report_provider.dart';
-import 'package:infra_report/repositories/report_repository.dart';
 import 'package:infra_report/screens/report_details/report_details_screen.dart';
 import 'package:infra_report/services/api_service.dart';
 import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infra_report/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'notification_service.g.dart';
@@ -42,7 +38,7 @@ class NotificationService {
     if (fcmToken == null) {
       return;
     }
-    print("FCM Token: $fcmToken");
+    log.info("FCM Token: $fcmToken");
 
     final token = await _storageService.read(SecureStorageService.tokenKey);
 
@@ -54,11 +50,11 @@ class NotificationService {
       await _apiService.saveFcmToken(fcmToken);
       await _storageService.write(SecureStorageService.fcmTokenKey, fcmToken);
     } else {
-      print("fcm token already saved");
+      log.info("fcm token already saved");
     }
 
     FirebaseMessaging.instance.onTokenRefresh.listen((refreshedToken) {
-      print("FCM token refreshed. Resetting sync status and re-syncing...");
+      log.info("FCM token refreshed. Resetting sync status and re-syncing...");
       // When the token refreshes, we must reset the sync status and re-sync.
       _storageService.delete(SecureStorageService.fcmTokenKey).then((_) {
         _setupFcm(); // Re-run the setup logic with the new token.
@@ -66,7 +62,7 @@ class NotificationService {
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('--- Got a message whilst in the foreground!');
+      log.info('--- Got a message whilst in the foreground!');
       _ref?.invalidate(notificationsProvider);
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -91,7 +87,7 @@ class NotificationService {
   }
 
   Future<void> _handleNotificationTap(RemoteMessage message) async {
-    print('FCM Notification tapped, forwarding payload: ${message.data}');
+    log.info('FCM Notification tapped, forwarding payload: ${message.data}');
     final reportId = message.data['report_id'] as String?;
     if (reportId == null) {
       // No action for notifications without a reportId
@@ -99,9 +95,9 @@ class NotificationService {
     }
 
     // --- NAVIGATION LOGIC ---
-    // This part is left "unfunctional" as requested, but the logic is here.
+    // This part is left "un functional" as requested, but the logic is here.
     // To make it functional, you need a method in your repository to fetch a single report.
-    print("fcm Tapped notification for report ID: $reportId ");
+    log.info("fcm Tapped notification for report ID: $reportId ");
 
     _ref?.invalidate(notificationsProvider);
 
@@ -116,7 +112,7 @@ class NotificationService {
       final apiService = _container.read(apiServiceProvider);
       // You would need to implement getReportById in your repository
       final report = await apiService.fetchReportById(id: reportId);
-      print("fcm fetched report $report");
+      log.info("fcm fetched report $report");
       navigatorKey.currentState?.pop(loading);
 
       navigatorKey.currentState?.push(
@@ -127,7 +123,7 @@ class NotificationService {
     } catch (e) {
       navigatorKey.currentState?.pop(loading);
 
-      print("can't fetch report");
+      log.warning("can't fetch report");
     }
   }
 

@@ -7,8 +7,6 @@ import 'package:infra_report/models/user_model.dart';
 import 'package:infra_report/providers/api_service_provider.dart';
 import 'package:infra_report/providers/database_provider.dart';
 import 'package:infra_report/providers/image_cache_provider.dart';
-import 'package:infra_report/providers/profile_provider.dart';
-import 'package:infra_report/providers/report_provider.dart';
 import 'package:infra_report/services/api_service.dart';
 import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
@@ -33,8 +31,6 @@ class Auth extends _$Auth {
 
     if (token != null) {
       final user = await _apiService.fetchProfile();
-      print("user profile $user");
-
       await _storageService.write(
         SecureStorageService.userKey,
         jsonEncode(user.toJson()),
@@ -48,8 +44,6 @@ class Auth extends _$Auth {
   Future<String?> _getDeviceId() async {
     final mobileDeviceIdentifierPlugin = MobileDeviceIdentifier();
     String? deviceId = await mobileDeviceIdentifierPlugin.getDeviceId();
-
-    print("device id $deviceId");
     if (deviceId == null) {
       return null;
     }
@@ -66,13 +60,9 @@ class Auth extends _$Auth {
         throw Exception("Could not retrieve device ID.");
       }
 
-      print("device id $deviceId");
-
       final authResponse = await _apiService.authenticateWithDeviceId(deviceId);
       final token = authResponse.token;
       final user = authResponse.user;
-
-      print("token $token");
       await _storageService.write(SecureStorageService.tokenKey, token);
       await _storageService.write(
         SecureStorageService.userKey,
@@ -125,13 +115,10 @@ class Auth extends _$Auth {
 
   Future<User> fetchProfile() async {
     final user = await _apiService.fetchProfile();
-    print("api user $user");
     await _storageService.write(
       SecureStorageService.userKey,
       jsonEncode(user.toJson()),
     );
-    final jsonUser = await _storageService.read(SecureStorageService.userKey);
-    print("json user $jsonUser");
     return user;
   }
 }

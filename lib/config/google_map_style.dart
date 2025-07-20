@@ -1,4 +1,4 @@
-const map_dark_style = """
+const mapDarkStyle = """
 [
   {
     "elementType": "geometry",

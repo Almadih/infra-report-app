@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for AnnotatedRegion
 import 'package:infra_report/config/google_map_style.dart';
-import 'package:infra_report/providers/database_provider.dart';
 import 'package:infra_report/providers/home_map_data_provider.dart';
 import 'package:infra_report/providers/location_provider.dart';
 import 'package:infra_report/providers/map_controller_provider.dart';
@@ -14,6 +13,7 @@ import 'package:infra_report/utils/location_dialog_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:infra_report/models/report_model.dart' as app_models;
+import 'package:infra_report/utils/logger.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -162,9 +162,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         BitmapDescriptor.hueAzure,
                       )
                     : _getMarkerIcon(report.severity.name),
-                zIndex: isSelected
-                    ? 1.0
-                    : 0.0, // Bring selected marker to the front
+                zIndexInt: isSelected
+                    ? 1
+                    : 0, // Bring selected marker to the front
                 onTap: () {
                   setState(() {
                     _selectedReport = report;
@@ -190,7 +190,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             return Stack(
               children: [
                 GoogleMap(
-                  style: map_dark_style,
+                  style: mapDarkStyle,
                   initialCameraPosition: initialCameraPosition,
                   markers: markers,
                   onTap: (LatLng location) {
@@ -273,8 +273,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           },
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stackTrace) {
-            print(error);
-            print(stackTrace);
+            log.severe(error);
             // The UI in case of error can now be simpler, as the dialog handles the details.
             return Center(
               child: Padding(

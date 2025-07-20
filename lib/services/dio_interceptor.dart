@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infra_report/providers/auth_provider.dart';
 import 'package:infra_report/services/secure_storage_service.dart';
+import 'package:infra_report/utils/logger.dart';
 
 class AuthInterceptor extends Interceptor {
   final SecureStorageService _storageService;
@@ -46,7 +47,9 @@ class AuthInterceptor extends Interceptor {
       // If we get a 401, it means our token is invalid or expired.
       // Here you would typically trigger a global logout event.
       // For now, we can just print a message.
-      print('AUTH ERROR: Received 401 Unauthorized. Token might be invalid.');
+      log.warning(
+        'AUTH ERROR: Received 401 Unauthorized. Token might be invalid.',
+      );
       // You could call a logout method from your Auth provider here.
       // final ref =
       final container = ProviderContainer();

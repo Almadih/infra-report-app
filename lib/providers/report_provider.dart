@@ -1,8 +1,6 @@
 // lib/providers/report_provider.dart
 import 'package:infra_report/models/report_model.dart';
-import 'package:infra_report/providers/dio_provider.dart';
 import 'package:infra_report/repositories/report_repository.dart';
-import 'package:infra_report/services/api_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'report_provider.g.dart';

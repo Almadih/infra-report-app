@@ -31,7 +31,7 @@ Future<Position> userLocation(ref) async {
   // 3. When we reach here, permissions are granted. Get the current location.
   try {
     return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
+      locationSettings: AndroidSettings(accuracy: LocationAccuracy.high),
     );
   } catch (e) {
     // Catch any other potential errors from geolocator

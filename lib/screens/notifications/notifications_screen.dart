@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:infra_report/models/notification_model.dart';
 import 'package:infra_report/providers/api_service_provider.dart';
 import 'package:infra_report/providers/notification_provider.dart';
-import 'package:infra_report/providers/report_provider.dart';
 import 'package:infra_report/repositories/report_repository.dart';
 import 'package:infra_report/screens/report_details/report_details_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:infra_report/utils/logger.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
@@ -87,16 +86,15 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     WidgetRef ref,
     AppNotification notification,
   ) async {
-    print(notification);
     if (notification.reportId == null) {
       // No action for notifications without a reportId
       return;
     }
 
     // --- NAVIGATION LOGIC ---
-    // This part is left "unfunctional" as requested, but the logic is here.
+    // This part is left "un functional" as requested, but the logic is here.
     // To make it functional, you need a method in your repository to fetch a single report.
-    print("Tapped notification for report ID: ${notification.reportId}");
+    log.info("Tapped notification for report ID: ${notification.reportId}");
 
     // --- PSEUDO-CODE FOR FUNCTIONAL IMPLEMENTATION ---
 

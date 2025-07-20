@@ -11,7 +11,6 @@ class LocationDialogHelper {
     String content = 'An unknown error occurred. Please try again.';
     String buttonText = 'OK';
     VoidCallback? onButtonPressed = () => Navigator.of(context).pop();
-    print(error);
 
     if (error is LocationServiceDisabledException) {
       title = 'Location Services Disabled';

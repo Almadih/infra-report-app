@@ -13,13 +13,14 @@ import 'package:infra_report/utils/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infra_report/app.dart'; // Import provider
 import 'package:infra_report/screens/onboarding/onboarding_screen.dart';
+import 'package:infra_report/utils/logger.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
-  print("--- Handling a background message: ${message.messageId}");
-  print("--- Message data: ${message.data}");
+  log.info("--- Handling a background message: ${message.messageId}");
+  log.info("--- Message data: ${message.data}");
 }
 
 void main() async {
@@ -120,7 +121,6 @@ class ErrorScreen extends StatelessWidget {
   const ErrorScreen({super.key, required this.error, required this.stack});
   @override
   Widget build(BuildContext context) {
-    print(stack);
     return Scaffold(
       body: Center(
         child: Padding(

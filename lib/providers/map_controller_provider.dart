@@ -1,5 +1,4 @@
 // lib/providers/map_controller_provider.dart
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,11 +27,6 @@ class MapScreenController extends _$MapScreenController {
       // Forcing a rebuild of listeners can be done by reassigning state:
       state = _controller;
     }
-  }
-
-  // Method to apply style
-  Future<void> setMapStyle(String mapStyleJson) async {
-    await _controller?.setMapStyle(mapStyleJson);
   }
 
   // Optional: Method to animate camera or other controller actions

@@ -1,6 +1,5 @@
 // lib/screens/profile/profile_screen.dart
 import 'package:flutter/material.dart';
-import 'package:infra_report/models/auth_state.dart';
 import 'package:infra_report/providers/auth_provider.dart';
 import 'package:infra_report/providers/profile_provider.dart';
 import 'package:infra_report/screens/notifications/edit_profile_screen.dart';

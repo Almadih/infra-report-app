@@ -6,6 +6,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
 import 'package:infra_report/models/notification_model.dart';
+import 'package:infra_report/utils/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:infra_report/models/report_model.dart' as app_models;
@@ -88,10 +89,6 @@ class AppDatabase extends _$AppDatabase {
   Stream<List<app_models.Report>> watchAllReports() {
     // This is a simplified reactive query. For full reactivity on joined data,
     // it can get more complex. This re-fetches images when the reports table changes.
-    final re = select(localReports);
-    re.get().then((r) => print("reports ss $r"));
-
-    print("reports db");
     return (select(localReports)..orderBy([
           (t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc),
         ]))
@@ -307,7 +304,7 @@ class AppDatabase extends _$AppDatabase {
         }
       });
     } catch (e) {
-      print("sync error $e");
+      log.warning("sync error $e");
     }
   }
 
@@ -460,7 +457,6 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    print(p.join(dbFolder.path, 'db.sqlite'));
     return NativeDatabase.createInBackground(file);
   });
 }

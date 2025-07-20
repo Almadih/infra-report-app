@@ -21,6 +21,5 @@ Future<ThemeData> getTheme() async {
   final themeStr = await rootBundle.loadString('assets/appainter_theme.json');
   final themeJson = jsonDecode(themeStr);
   final theme = ThemeDecoder.decodeThemeData(themeJson)!;
-  print("theme: $theme");
   return theme;
 }

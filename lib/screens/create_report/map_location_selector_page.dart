@@ -37,7 +37,7 @@ class _MapLocationSelectorPageState extends State<MapLocationSelectorPage> {
   Future<void> _getCurrentLocationAndSetInitial() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: AndroidSettings(accuracy: LocationAccuracy.high),
       );
       final currentLatLng = LatLng(position.latitude, position.longitude);
       if (mounted) {
