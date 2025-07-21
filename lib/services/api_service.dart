@@ -120,7 +120,7 @@ class ApiService {
     }
   }
 
-  Future<List<Report>> fetchReports({
+  Future<(List<Report>, ReportLocation?)> fetchReports({
     int radius = 20000,
     required Position location,
   }) async {
@@ -135,10 +135,15 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        List<dynamic> data = response.data is List
-            ? response.data
-            : response.data['data'];
-        return data.map((json) => Report.fromJson(json)).toList();
+        List<dynamic> reportsJson = response.data['reports'];
+        ReportLocation? center = response.data['center'] != null
+            ? ReportLocation.fromJson(response.data['center'])
+            : null;
+        final reports = reportsJson
+            .map((json) => Report.fromJson(json))
+            .toList();
+
+        return (reports, center);
       } else {
         throw Exception('Failed to load reports api : ${response.statusCode}');
       }

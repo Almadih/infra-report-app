@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 class HomeMapData {
   final List<Report> reports;
   final Position userPosition;
+  final ReportLocation? center;
 
-  HomeMapData({required this.reports, required this.userPosition});
+  HomeMapData({required this.reports, required this.userPosition, this.center});
 }

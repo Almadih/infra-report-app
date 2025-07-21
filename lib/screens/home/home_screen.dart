@@ -4,7 +4,6 @@ import 'package:flutter/services.dart'; // Import for AnnotatedRegion
 import 'package:infra_report/config/google_map_style.dart';
 import 'package:infra_report/providers/home_map_data_provider.dart';
 import 'package:infra_report/providers/location_provider.dart';
-import 'package:infra_report/providers/map_controller_provider.dart';
 import 'package:infra_report/repositories/report_repository.dart';
 import 'package:infra_report/screens/create_report/create_report_screen.dart';
 import 'package:infra_report/screens/home/widgets/map_report_card.dart';
@@ -40,18 +39,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     try {
       // Invalidate to force a fresh location read.
       ref.invalidate(userLocationProvider);
-      // Await the new position. This will throw if permissions are denied.
-      final position = await ref.read(userLocationProvider.future);
-      final userLatLng = LatLng(position.latitude, position.longitude);
-
-      // Animate the map camera to the user's location.
-      final mapControllerNotifier = ref.read(
-        mapScreenControllerProvider.notifier,
-      );
-      mapControllerNotifier.animateCamera(
-        CameraUpdate.newLatLngZoom(userLatLng, 14),
-      );
-
       // Explicitly trigger a refresh of reports for the new location.
       ref.invalidate(reportRepositoryProvider);
     } finally {
@@ -182,9 +169,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               );
             }).toSet();
 
+            LatLng? centerPosition;
+            final center = homeMapData.center;
+            if (center != null) {
+              centerPosition = LatLng(
+                center.coordinates[1],
+                center.coordinates[0],
+              );
+            }
             final initialCameraPosition = CameraPosition(
-              target: LatLng(userLocation.latitude, userLocation.longitude),
-              zoom: 12,
+              target:
+                  centerPosition ??
+                  LatLng(userLocation.latitude, userLocation.longitude),
+              zoom: 10,
             );
 
             return Stack(

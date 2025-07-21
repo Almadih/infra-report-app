@@ -1,8 +1,12 @@
 // lib/providers/home_map_data_provider.dart
 
+import 'dart:convert';
+
 import 'package:infra_report/models/home_map_data.dart';
+import 'package:infra_report/models/report_model.dart';
 import 'package:infra_report/providers/location_provider.dart';
 import 'package:infra_report/repositories/report_repository.dart';
+import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_map_data_provider.g.dart';
@@ -20,9 +24,20 @@ Future<HomeMapData> homeMapData(ref) async {
   // The UI will update reactively when the sync completes and writes to the DB.
   await repository.syncReportsWithApi(userPosition);
 
+  final storageService = ref.read(secureStorageServiceProvider);
+  final center = await storageService.read(SecureStorageService.centerKey);
+  ReportLocation? centerLocation;
+  if (center != null && center != 'null') {
+    centerLocation = ReportLocation.fromJson(jsonDecode(center));
+  }
+
   // 4. Await the first value from the pure database stream.
   final reports = await repository.watchReports().first;
 
   // 5. Return the combined data.
-  return HomeMapData(reports: reports, userPosition: userPosition);
+  return HomeMapData(
+    reports: reports,
+    userPosition: userPosition,
+    center: centerLocation,
+  );
 }

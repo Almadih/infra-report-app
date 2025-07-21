@@ -10,6 +10,7 @@ class SecureStorageService {
   static const tokenKey = 'auth_token';
   static const fcmTokenKey = 'fcm_token';
   static const userKey = 'user';
+  static const centerKey = 'center';
 
   Future<void> write(String key, dynamic value) async {
     await _storage.write(key: key, value: value);

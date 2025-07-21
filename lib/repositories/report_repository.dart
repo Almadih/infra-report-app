@@ -12,6 +12,7 @@ import 'package:infra_report/providers/report_provider.dart';
 import 'package:infra_report/providers/sync_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:infra_report/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:infra_report/models/report_model.dart' as app_models;
@@ -26,8 +27,14 @@ class ReportRepository {
   final ApiService _apiService;
   final AppDatabase _db;
   final bool _isOnline;
+  final SecureStorageService _secureStorageService;
 
-  ReportRepository(this._apiService, this._db, this._isOnline);
+  ReportRepository(
+    this._apiService,
+    this._db,
+    this._isOnline,
+    this._secureStorageService,
+  );
 
   Stream<List<app_models.Report>> watchReports() {
     return _db.watchAllReports();
@@ -45,7 +52,15 @@ class ReportRepository {
 
     try {
       final apiReports = await _apiService.fetchReports(location: userPosition);
-      await _db.cacheApiReports(apiReports);
+      if (apiReports.$2 != null) {
+        await _secureStorageService.write(
+          SecureStorageService.centerKey,
+          jsonEncode(apiReports.$2),
+        );
+      } else {
+        await _secureStorageService.delete(SecureStorageService.centerKey);
+      }
+      await _db.cacheApiReports(apiReports.$1);
       log.info("Successfully synced reports with API.");
     } catch (e) {
       log.warning("Failed to sync reports with API: $e");
@@ -57,7 +72,7 @@ class ReportRepository {
   Future<void> forceRefreshReports(Position location) async {
     if (_isOnline) {
       final apiReports = await _apiService.fetchReports(location: location);
-      await _db.cacheApiReports(apiReports);
+      await _db.cacheApiReports(apiReports.$1);
     } else {
       throw Exception("Cannot refresh while offline.");
     }
@@ -257,5 +272,6 @@ ReportRepository reportRepository(ref) {
     ref.watch(apiServiceProvider), // Your existing ApiService provider
     ref.watch(appDatabaseProvider),
     ref.watch(appConnectivityProvider).value ?? false, // Check if online
+    ref.watch(secureStorageServiceProvider),
   );
 }

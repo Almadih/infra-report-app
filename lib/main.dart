@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infra_report/app.dart'; // Import provider
 import 'package:infra_report/screens/onboarding/onboarding_screen.dart';
 import 'package:infra_report/utils/logger.dart';
+import 'package:logging/logging.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -36,6 +37,11 @@ void main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
+
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
 
   final theme = await getTheme();
   // Set the background messaging handler
