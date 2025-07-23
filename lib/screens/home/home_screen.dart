@@ -1,11 +1,14 @@
 // lib/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for AnnotatedRegion
+import 'package:geolocator/geolocator.dart';
 import 'package:infra_report/config/google_map_style.dart';
+import 'package:infra_report/models/home_map_data.dart';
 import 'package:infra_report/providers/home_map_data_provider.dart';
 import 'package:infra_report/providers/location_provider.dart';
 import 'package:infra_report/repositories/report_repository.dart';
 import 'package:infra_report/screens/create_report/create_report_screen.dart';
+import 'package:infra_report/screens/home/widgets/loadin_overlay.dart';
 import 'package:infra_report/screens/home/widgets/map_report_card.dart';
 import 'package:infra_report/utils/exceptions.dart';
 import 'package:infra_report/utils/location_dialog_helper.dart';
@@ -19,6 +22,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+CameraPosition getCameraPosition(HomeMapData homeMapData) {
+  LatLng? centerPosition;
+  final center = homeMapData.center;
+  if (center != null) {
+    centerPosition = LatLng(center.coordinates[1], center.coordinates[0]);
+  }
+  return CameraPosition(
+    target:
+        centerPosition ??
+        LatLng(
+          homeMapData.userPosition.latitude,
+          homeMapData.userPosition.longitude,
+        ),
+    zoom: 10,
+  );
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
@@ -127,8 +147,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         body: homeMapAsyncValue.when(
           data: (homeMapData) {
+            if (_mapController != null) {
+              _mapController!.animateCamera(
+                CameraUpdate.newCameraPosition(getCameraPosition(homeMapData)),
+              );
+            }
             final reports = homeMapData.reports;
-            final userLocation = homeMapData.userPosition;
             final int selectedIndex = _selectedReport == null
                 ? -1
                 : homeMapData.reports.indexWhere(
@@ -169,26 +193,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               );
             }).toSet();
 
-            LatLng? centerPosition;
-            final center = homeMapData.center;
-            if (center != null) {
-              centerPosition = LatLng(
-                center.coordinates[1],
-                center.coordinates[0],
-              );
-            }
-            final initialCameraPosition = CameraPosition(
-              target:
-                  centerPosition ??
-                  LatLng(userLocation.latitude, userLocation.longitude),
-              zoom: 10,
-            );
-
             return Stack(
               children: [
                 GoogleMap(
                   style: mapDarkStyle,
-                  initialCameraPosition: initialCameraPosition,
+                  initialCameraPosition: getCameraPosition(homeMapData),
                   markers: markers,
                   onTap: (LatLng location) {
                     setState(() {
@@ -268,7 +277,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ],
             );
           },
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () {
+            return Stack(
+              children: [
+                // Show the map (with last known center or a default)
+                GoogleMap(
+                  onMapCreated: (GoogleMapController controller) {
+                    // You can store the controller if needed
+                    _mapController = controller;
+                  },
+                  style: mapDarkStyle,
+                  initialCameraPosition: const CameraPosition(
+                    target: LatLng(
+                      15.5007,
+                      32.5599,
+                    ), // Default center (Khartoum example)
+                    zoom: 10,
+                  ),
+                  zoomControlsEnabled: false,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: false,
+                ),
+                // Semi-transparent overlay
+                LoadingOverlay(message: "Loading reports.."),
+              ],
+            );
+          },
           error: (error, stackTrace) {
             log.severe(error);
             // The UI in case of error can now be simpler, as the dialog handles the details.
@@ -319,21 +353,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   BitmapDescriptor _getMarkerIcon(String severityName) {
     switch (severityName.toLowerCase()) {
       case 'critical':
-        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+        return BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueViolet,
+        );
       case 'high':
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+      case 'medium':
         return BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueOrange,
-        );
-      case 'moderate':
-        return BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueYellow,
         );
       case 'low':
         return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
       default:
-        return BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueViolet,
-        );
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
     }
   }
 }

@@ -6,7 +6,7 @@ part of 'home_map_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeMapDataHash() => r'b1c36f136ed9786012dd6e7269c2e5fc731634d2';
+String _$homeMapDataHash() => r'aa95a8e677d8513dfeae90751a47879e7ab8d2dd';
 
 /// See also [homeMapData].
 @ProviderFor(homeMapData)

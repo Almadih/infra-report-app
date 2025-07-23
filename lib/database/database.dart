@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:infra_report/models/report_model.dart' as app_models;
 import 'tables.dart';
+import 'package:sqlite3/sqlite3.dart';
 
 part 'database.g.dart'; // Drift will generate this file
 
@@ -29,14 +30,14 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3; // Increment this when you change tables
+  int get schemaVersion => 1; // Increment this when you change tables
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (m) async {
         /// Create all tables
-        m.createAll();
+        await m.createAll();
       },
       onUpgrade: (m, from, to) async {
         /// Run migration steps without foreign keys and re-enable them later
@@ -258,10 +259,20 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> cacheApiReports(List<app_models.Report> apiReports) async {
     try {
-      await batch((batch) {
+      await batch((batch) async {
         // Clear old data for a full refresh
-        batch.deleteAll(localReportImages);
-        batch.deleteAll(localReports);
+        final existingReportIds = await (select(
+          localReports,
+        )).map((r) => r.id).get();
+
+        log.info("Deleting old reports ${existingReportIds.length}");
+
+        // Step 2: Delete images linked to those reports
+        if (existingReportIds.isNotEmpty) {
+          await (delete(
+            localReportImages,
+          )..where((img) => img.reportId.isIn(existingReportIds))).go();
+        }
 
         for (final apiReport in apiReports) {
           batch.insert(
@@ -309,10 +320,19 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<void> cacheApiMyReports(List<app_models.Report> apiReports) async {
-    await batch((batch) {
+    await batch((batch) async {
       // Clear old data for a full refresh
-      batch.deleteAll(localReportImages);
-      batch.deleteAll(myLocalReports);
+
+      final existingReportIds = await (select(
+        myLocalReports,
+      )).map((r) => r.id).get();
+
+      // Step 2: Delete images linked to those reports
+      if (existingReportIds.isNotEmpty) {
+        await (delete(
+          localReportImages,
+        )..where((img) => img.reportId.isIn(existingReportIds))).go();
+      }
 
       for (final apiReport in apiReports) {
         batch.insert(
@@ -457,6 +477,16 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    return NativeDatabase.createInBackground(file);
+
+    /// Also work around limitations on old Android versions
+
+    /// Make sqlite3 pick a more suitable location for temporary files - the
+    /// one from the system may be inaccessible due to sandboxing.
+    final cacheBase = (await getTemporaryDirectory()).path;
+
+    /// We can't access /tmp on Android, which sqlite3 would try by default.
+    /// Explicitly tell it about the correct temporary directory.
+    sqlite3.tempDirectory = cacheBase;
+    return NativeDatabase.createInBackground(file, logStatements: false);
   });
 }

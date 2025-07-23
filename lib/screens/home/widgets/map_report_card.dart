@@ -1,6 +1,7 @@
 // lib/screens/home/widgets/map_report_card.dart
 import 'package:flutter/material.dart';
 import 'package:infra_report/models/report_model.dart' as app_models;
+import 'package:infra_report/screens/history/widgets/severity_badge.dart';
 import 'package:infra_report/screens/history/widgets/status_badge.dart';
 import 'package:infra_report/screens/report_details/report_details_screen.dart';
 import 'package:infra_report/widgets/authenticated_image.dart';
@@ -137,6 +138,9 @@ class MapReportCard extends StatelessWidget {
                 tooltip: 'Previous Report',
               ),
               Flexible(child: StatusBadge(statusName: report.status.name)),
+              Flexible(
+                child: SeverityBadge(severityName: report.severity.name),
+              ),
               IconButton(
                 onPressed: hasNext ? onNext : null,
                 icon: const Icon(Icons.arrow_forward_ios),
