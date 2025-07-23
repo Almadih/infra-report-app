@@ -25,13 +25,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     OnboardingItem(
       imagePath:
           'assets/onboarding/photo-11.png', // Replace with your actual image paths
-      title: 'Welcome to ReportIt!',
+      title: 'Welcome to Infra Report',
       description: 'Easily report incidents and view them on a live map.',
     ),
     OnboardingItem(
       imagePath: 'assets/onboarding/photo-22.png',
       title: 'Stay Informed',
-      description: 'Get real-time updates on reported issues in your area.',
+      description: 'Get real-time updates on on your reports.',
     ),
     OnboardingItem(
       imagePath: 'assets/onboarding/photo-333.png',
