@@ -5,6 +5,8 @@
 |-------------|-------------|--------------|--------------|--------------|
 | ![Onboarding](./screenshots/onboarding.jpg) | ![Home Screen](./screenshots/home.jpg) | ![Submit Report form](./screenshots/report_form.jpg) | ![Report History](./screenshots/report_history.jpg) | ![Report Detail](./screenshots/report_details.jpg) |
 
+## Download
+you can download the APK for release version from [here](https://github.com/Almadih/infra-report-app/releases/latest)
 
 ## Overview
 Infra Report is a **Flutter-based mobile application** that empowers citizens to report damaged infrastructure in Sudan. By submitting geotagged photos and descriptions, users contribute to a crowdsourced database that helps prioritize repair and reconstruction efforts.
