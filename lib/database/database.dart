@@ -310,6 +310,7 @@ class AppDatabase extends _$AppDatabase {
                 reportId: apiReport.id,
                 url: img.path,
               ),
+              mode: InsertMode.insertOrReplace,
             );
           }
         }
@@ -367,6 +368,7 @@ class AppDatabase extends _$AppDatabase {
               reportId: apiReport.id,
               url: img.path,
             ),
+            mode: InsertMode.insertOrReplace,
           );
         }
       }

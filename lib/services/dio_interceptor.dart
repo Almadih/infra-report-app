@@ -1,7 +1,9 @@
 // lib/services/dio_interceptor.dart
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:infra_report/providers/auth_provider.dart';
+import 'package:infra_report/models/auth_state.dart';
+import 'package:infra_report/providers/database_provider.dart';
+import 'package:infra_report/providers/image_cache_provider.dart';
 import 'package:infra_report/services/secure_storage_service.dart';
 import 'package:infra_report/utils/logger.dart';
 
@@ -52,10 +54,22 @@ class AuthInterceptor extends Interceptor {
       );
       // You could call a logout method from your Auth provider here.
       // final ref =
-      final container = ProviderContainer();
 
-      container.read(authProvider.notifier).logout();
+      logout(_storageService);
     }
     super.onError(err, handler);
   }
+}
+
+Future<void> logout(SecureStorageService storageService) async {
+  final ref = ProviderContainer();
+
+  // Delete both token and user data
+  await storageService.delete(SecureStorageService.userKey);
+  await storageService.delete(SecureStorageService.tokenKey);
+  await storageService.delete(SecureStorageService.fcmTokenKey);
+  await ref.read(appDatabaseProvider).deleteEverything();
+  final state = const AsyncData(AuthState.unauthenticated());
+  // Also clear image cache on logout for privacy
+  ref.read(imageCacheManagerProvider).emptyCache();
 }

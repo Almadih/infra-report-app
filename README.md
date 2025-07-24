@@ -1,9 +1,9 @@
 # Infra Report – Mobile App
 
 ## Screenshots
-| Onboarding | Home Screen | Submit Report form |
-|-------------|-------------|--------------|
-| ![Onboarding](./screenshots/onboarding.jpg) | ![Home Screen](./screenshots/home.jpg) | ![Submit Report form](./screenshots/report_form.jpg) |
+| Onboarding | Home Screen | Submit Report form | Report History | report detail |
+|-------------|-------------|--------------|--------------|--------------|
+| ![Onboarding](./screenshots/onboarding.jpg) | ![Home Screen](./screenshots/home.jpg) | ![Submit Report form](./screenshots/report_form.jpg) | ![Report History](./screenshots/report_history.jpg) | ![Report Detail](./screenshots/report_details.jpg) |
 
 
 ## Overview

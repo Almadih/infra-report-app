@@ -121,7 +121,7 @@ class ApiService {
   }
 
   Future<(List<Report>, ReportLocation?)> fetchReports({
-    int radius = 20000,
+    int radius = 10000,
     required Position location,
   }) async {
     try {
