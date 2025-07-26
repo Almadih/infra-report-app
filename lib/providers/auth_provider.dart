@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:infra_report/models/auth_state.dart';
 import 'package:infra_report/models/user_model.dart';
 import 'package:infra_report/providers/api_service_provider.dart';
+import 'package:infra_report/providers/connectivity_provider.dart';
 import 'package:infra_report/providers/database_provider.dart';
 import 'package:infra_report/providers/image_cache_provider.dart';
 import 'package:infra_report/services/api_service.dart';
@@ -28,12 +29,20 @@ class Auth extends _$Auth {
     // Check storage for existing token and user data
     final token = await _storageService.read(SecureStorageService.tokenKey);
     // final user = await _storageService.read(SecureStorageService.userKey);
-
+    final isOnline = await ref.read(appConnectivityProvider.future);
     if (token != null) {
-      final user = await _apiService.fetchProfile();
-      await _storageService.write(
-        SecureStorageService.userKey,
-        jsonEncode(user.toJson()),
+      if (isOnline) {
+        final user = await _apiService.fetchProfile();
+        await _storageService.write(
+          SecureStorageService.userKey,
+          jsonEncode(user.toJson()),
+        );
+      }
+
+      final user = User.fromJson(
+        jsonDecode(
+          await _storageService.read(SecureStorageService.userKey) ?? "{}",
+        ),
       );
       return AuthState.authenticated(user: user, token: token);
     }
