@@ -407,21 +407,22 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
       log.info('Damage Type ID: $_selectedDamageTypeId');
       log.info('Severity ID: $_selectedSeverityId');
       log.info('Description: $_description');
-
-      List<Placemark> placeMarks = await placemarkFromCoordinates(
-        _selectedLocation!.latitude,
-        _selectedLocation!.longitude,
-      );
-
       String address = "not available";
       String? city = "";
 
-      if (placeMarks.isNotEmpty) {
-        final placeMark = placeMarks.first;
-        //street, city, region, postalCode, country
-        city = placeMark.administrativeArea;
+      if (isConnected) {
+        List<Placemark> placeMarks = await placemarkFromCoordinates(
+          _selectedLocation!.latitude,
+          _selectedLocation!.longitude,
+        );
 
-        address = formatAddress(placeMark);
+        if (placeMarks.isNotEmpty) {
+          final placeMark = placeMarks.first;
+          //street, city, region, postalCode, country
+          city = placeMark.administrativeArea;
+
+          address = formatAddress(placeMark);
+        }
       }
 
       setState(() {

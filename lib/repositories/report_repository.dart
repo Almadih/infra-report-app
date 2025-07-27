@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:infra_report/database/database.dart';
 import 'package:infra_report/providers/api_service_provider.dart';
 import 'package:infra_report/providers/home_map_data_provider.dart';
@@ -13,6 +14,7 @@ import 'package:infra_report/providers/sync_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:infra_report/services/secure_storage_service.dart';
+import 'package:infra_report/utils/index.dart';
 import 'package:infra_report/utils/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:infra_report/models/report_model.dart' as app_models;
@@ -221,6 +223,20 @@ class ReportRepository {
         final imagePaths = (jsonDecode(report.imagePaths) as List)
             .cast<String>();
         final imageFiles = imagePaths.map((path) => File(path)).toList();
+        String address = "not available";
+        String? city = "";
+        List<Placemark> placeMarks = await placemarkFromCoordinates(
+          report.latitude,
+          report.longitude,
+        );
+
+        if (placeMarks.isNotEmpty) {
+          final placeMark = placeMarks.first;
+          //street, city, region, postalCode, country
+          city = placeMark.administrativeArea;
+
+          address = formatAddress(placeMark);
+        }
         await submitReport(
           images: imageFiles,
           latitude: report.latitude,
@@ -228,8 +244,8 @@ class ReportRepository {
           damageTypeId: report.damageTypeId,
           severityId: report.severityId,
           description: report.description,
-          city: report.city,
-          address: report.address,
+          city: city,
+          address: address,
         );
 
         await _db.deletePendingReport(report.id);

@@ -69,7 +69,7 @@ Future<void> logout(SecureStorageService storageService) async {
   await storageService.delete(SecureStorageService.tokenKey);
   await storageService.delete(SecureStorageService.fcmTokenKey);
   await ref.read(appDatabaseProvider).deleteEverything();
-  final state = const AsyncData(AuthState.unauthenticated());
+  AsyncData(AuthState.unauthenticated());
   // Also clear image cache on logout for privacy
   ref.read(imageCacheManagerProvider).emptyCache();
 }
