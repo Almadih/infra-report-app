@@ -1,42 +1,54 @@
+name: Build & Sign Flutter APK
+
 on:
   workflow_dispatch:
-name: Build APK release
-jobs:
-  android-release-build:
-    name: android-release-build
-    runs-on: ubuntu-latest
-    container: ghcr.io/cirruslabs/flutter:3.24.5
-    steps:
-      - uses: actions/checkout@v4
-      - uses: NiklasLehnfeld/flutter-android-build-action@v2
-        id: android-build
-        with:
-          release: true
-          keystore: ${{ secrets.ANDROID_RELEASE_KEY }}
-          keystore-pwd: "${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}"
-          key-pwd: "${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}"
-      - name: Archive APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-apk
-          path: ${{ steps.android-build.outputs.apk-path }}
+  push:
+    tags:
+      - "v*"
 
-  create-github-release:
-    name: create-github-release
+jobs:
+  build:
+    name: Build Signed APK
     runs-on: ubuntu-latest
-    needs: [android-release-build]
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          name: release-apk
-      - id: version
-        uses: NiklasLehnfeld/flutter-version-number-action@v2
-      - uses: marvinpinto/action-automatic-releases@latest
+          flutter-version: "3.22.0"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Decode keystore from base64
+        run: |
+          echo "${{ secrets.ANDROID_RELEASE_KEY }}" | base64 -d > android/app/my-release-key.jks
+
+      - name: Create key.properties file
+        run: |
+          cat > android/key.properties <<EOF
+          storePassword=${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+          keyAlias=upload
+          storeFile=my-release-key.jks
+          EOF
+
+      - name: Build Signed APK
+        run: flutter build apk --release
+
+      - name: Rename APK for Release
+        run: |
+          mkdir -p build_output
+          cp build/app/outputs/flutter-apk/app-release.apk build_output/app-release-${{ github.ref_name }}.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          prerelease: false
-          automatic_release_tag: ${{ steps.version.outputs.version-number }}
-          title: ${{ steps.version.outputs.version-number }}
-          files: |
-            *.apk
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: build_output/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
