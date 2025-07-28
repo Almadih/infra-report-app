@@ -110,6 +110,7 @@ class ReportRepository {
     if (_isOnline) {
       final apiReports = await _apiService.fetchMyReports();
       await _db.cacheApiMyReports(apiReports);
+      log.info("Successfully synced my reports with API.");
     } else {
       throw Exception("Cannot refresh while offline.");
     }

@@ -87,15 +87,6 @@ class ProfileScreen extends ConsumerWidget {
                 title: const Text('Edit Profile'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () async {
-                  // final loading = DialogRoute(
-                  //   context: context,
-                  //   builder: (_) =>
-                  //       Center(child: CircularProgressIndicator()),
-                  // );
-                  // if (profile is AsyncLoading) {
-                  //   Navigator.of(context).push(loading);
-                  // }
-
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) =>
@@ -110,6 +101,9 @@ class ProfileScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   /* Navigate to Security Page */
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Not implemented")),
+                  );
                 },
               ),
               ListTile(
@@ -118,6 +112,10 @@ class ProfileScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   /* Navigate to Settings Page */
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Not implemented")),
+                  );
                 },
               ),
               const Divider(),

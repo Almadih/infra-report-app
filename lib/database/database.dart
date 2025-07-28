@@ -272,6 +272,10 @@ class AppDatabase extends _$AppDatabase {
           await (delete(
             localReportImages,
           )..where((img) => img.reportId.isIn(existingReportIds))).go();
+
+          await (delete(
+            myLocalReports,
+          )..where((tbl) => tbl.id.isIn(existingReportIds))).go();
         }
 
         for (final apiReport in apiReports) {
@@ -333,6 +337,11 @@ class AppDatabase extends _$AppDatabase {
         await (delete(
           localReportImages,
         )..where((img) => img.reportId.isIn(existingReportIds))).go();
+
+        // Step 3: Delete the reports
+        await (delete(
+          myLocalReports,
+        )..where((tbl) => tbl.id.isIn(existingReportIds))).go();
       }
 
       for (final apiReport in apiReports) {

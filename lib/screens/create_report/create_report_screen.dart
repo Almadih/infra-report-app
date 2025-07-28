@@ -224,14 +224,11 @@ class _CreateReportScreenState extends ConsumerState<CreateReportScreen> {
     // Map damage type names to icons
     final Map<String, IconData> damageTypeIcons = {
       "school": Icons.school,
-      "school building": Icons.school,
-      "road": Icons.directions_car,
-      "road damage": Icons.directions_car,
-      "building": Icons.business,
-      "public building": Icons.business,
+      "road": Icons.remove_road,
       "hospital": Icons.local_hospital,
-      "hospital infrastructure": Icons.local_hospital,
+      'water line': Icons.water_drop_rounded,
       "power line": Icons.electrical_services,
+      "mosque": Icons.mosque,
       // Add more mappings as needed
     };
 
