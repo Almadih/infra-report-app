@@ -6,6 +6,7 @@ import 'package:infra_report/providers/notification_provider.dart';
 import 'package:infra_report/repositories/report_repository.dart';
 import 'package:infra_report/screens/report_details/report_details_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infra_report/services/api_service.dart';
 import 'package:infra_report/utils/logger.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
@@ -172,7 +173,26 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         child: notificationsAsync.when(
           data: (notifications) {
             if (notifications.isEmpty) {
-              return const Center(child: Text('You have no notifications.'));
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    physics:
+                        const AlwaysScrollableScrollPhysics(), // Ensures it's scrollable
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'No notifications.\nPull down to refresh.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
             }
             return ListView.separated(
               itemCount: notifications.length,
@@ -208,12 +228,49 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text('Failed to load notifications: $error'),
-            ),
-          ),
+          // In the .when(error: ...) of notificationsAsync
+          error: (error, stack) {
+            String message = "Failed to load notifications.";
+            if (error is ApiError) {
+              switch (error.type) {
+                case ApiErrorType.offline:
+                  message =
+                      "You are offline. Please connect to the internet to see new notifications.";
+                  break;
+                case ApiErrorType.network:
+                  message = "Network error. Please try again.";
+                  break;
+                case ApiErrorType.server:
+                  message = "Server error. Please try again later.";
+                  break;
+                default:
+                  message = error.message;
+              }
+            }
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 50,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(message, textAlign: TextAlign.center),
+                    const SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      onPressed: _refreshNotifications,
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Try Again'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

@@ -10,6 +10,7 @@ import 'package:infra_report/providers/database_provider.dart';
 import 'package:infra_report/providers/image_cache_provider.dart';
 import 'package:infra_report/services/api_service.dart';
 import 'package:infra_report/services/secure_storage_service.dart';
+import 'package:infra_report/utils/logger.dart';
 import 'package:mobile_device_identifier/mobile_device_identifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:crypto/crypto.dart';
@@ -32,11 +33,15 @@ class Auth extends _$Auth {
     final isOnline = await ref.read(appConnectivityProvider.future);
     if (token != null) {
       if (isOnline) {
-        final user = await _apiService.fetchProfile();
-        await _storageService.write(
-          SecureStorageService.userKey,
-          jsonEncode(user.toJson()),
-        );
+        try {
+          final user = await _apiService.fetchProfile();
+          await _storageService.write(
+            SecureStorageService.userKey,
+            jsonEncode(user.toJson()),
+          );
+        } catch (e) {
+          log.severe("failed to load profile");
+        }
       }
 
       final user = User.fromJson(
