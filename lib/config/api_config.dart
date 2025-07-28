@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class ApiConfig {
   static const String baseUrl = kDebugMode
-      ? "http://10.103.141.227:8000"
+      ? "http://10.234.132.176:8000"
       : "https://infra-report.almadih.dev"; // Placeholder API URL
   static const String reportsEndpoint = "/api/reports";
   static const String myReportsEndpoint = "/api/my-reports";

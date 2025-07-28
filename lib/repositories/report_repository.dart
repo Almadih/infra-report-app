@@ -199,6 +199,7 @@ class ReportRepository {
   }
 
   Future<void> processPendingQueue(WidgetRef ref) async {
+    log.info("pending queue started $_isOnline");
     if (!_isOnline) return;
 
     final pendingReports = await _db.getQueuedReports();

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for AnnotatedRegion
 import 'package:infra_report/config/google_map_style.dart';
 import 'package:infra_report/models/home_map_data.dart';
+import 'package:infra_report/providers/connectivity_provider.dart';
 import 'package:infra_report/providers/home_map_data_provider.dart';
 import 'package:infra_report/providers/location_provider.dart';
 import 'package:infra_report/repositories/report_repository.dart';
@@ -94,6 +95,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             CameraUpdate.newCameraPosition(getCameraPosition(homeMapData)),
           );
         }
+      }
+    });
+
+    ref.listen<AsyncValue<bool>>(appConnectivityProvider, (previous, next) {
+      final isOnline = next.value ?? false;
+      final wasOnline = previous?.value ?? false;
+      log.info("online $isOnline");
+      log.info("wasOnline $wasOnline");
+      // Trigger queue processing when transitioning from offline to online.
+      if (isOnline && !wasOnline) {
+        ref.invalidate(appConnectivityProvider);
+        ref.read(reportRepositoryProvider).processPendingQueue(ref);
       }
     });
 

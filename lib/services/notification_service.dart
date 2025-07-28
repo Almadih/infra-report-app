@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:infra_report/models/auth_state.dart';
 import 'package:infra_report/providers/api_service_provider.dart';
+import 'package:infra_report/providers/auth_provider.dart';
 import 'package:infra_report/providers/navigator_key_provider.dart';
 import 'package:infra_report/providers/notification_provider.dart';
 import 'package:infra_report/screens/report_details/report_details_screen.dart';
@@ -26,14 +28,20 @@ class NotificationService {
 
   Future<void> initialize(WidgetRef ref) async {
     // FCM Integration
+    log.info("initializing notification service");
     _ref = ref;
     setupFlutterNotifications();
     await Firebase.initializeApp();
-    await _setupFcm();
+    await setupFcm();
   }
 
   // --- FCM METHODS ---
-  Future<void> _setupFcm() async {
+  Future<void> setupFcm() async {
+    final authState = await _ref?.read(authProvider.future);
+    if (authState == null || authState is Unauthenticated) {
+      return;
+    }
+
     final fcmToken = await FirebaseMessaging.instance.getToken();
     if (fcmToken == null) {
       return;
@@ -46,7 +54,9 @@ class NotificationService {
       SecureStorageService.fcmTokenKey,
     );
 
-    if (fcmToken != storeFcmToken && token != null) {
+    log.info("storeFcmToken $storeFcmToken");
+
+    if (storeFcmToken == null || (fcmToken != storeFcmToken && token != null)) {
       await _apiService.saveFcmToken(fcmToken);
       await _storageService.write(SecureStorageService.fcmTokenKey, fcmToken);
     } else {
@@ -57,12 +67,13 @@ class NotificationService {
       log.info("FCM token refreshed. Resetting sync status and re-syncing...");
       // When the token refreshes, we must reset the sync status and re-sync.
       _storageService.delete(SecureStorageService.fcmTokenKey).then((_) {
-        _setupFcm(); // Re-run the setup logic with the new token.
+        setupFcm(); // Re-run the setup logic with the new token.
       });
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log.info('--- Got a message whilst in the foreground!');
+      log.info("--- Got a message whilst in the foreground!");
+
       _ref?.invalidate(notificationsProvider);
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;

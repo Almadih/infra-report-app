@@ -41,7 +41,10 @@ class ApiService {
         log.info("API CALL: Profile updated successfully.");
         return User.fromJson(response.data);
       } else {
-        throw ApiError(ApiErrorType.server, 'Server returned an error while updating profile.');
+        throw ApiError(
+          ApiErrorType.server,
+          'Server returned an error while updating profile.',
+        );
       }
     });
   }
@@ -52,6 +55,7 @@ class ApiService {
         ApiConfig.fcmTokenEndpoint,
         data: {"fcm_token": fcmToken},
       );
+      log.info("response.statusCode $response");
       if (response.statusCode != 200) {
         throw ApiError(ApiErrorType.server, 'Failed to save fcm token.');
       } else {
@@ -66,7 +70,10 @@ class ApiService {
         '${ApiConfig.notificationEndpoint}/read-all',
       );
       if (response.statusCode != 200) {
-        throw ApiError(ApiErrorType.server, 'Failed to mark notifications as read.');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to mark notifications as read.',
+        );
       }
     });
   }
@@ -77,7 +84,10 @@ class ApiService {
         '${ApiConfig.notificationEndpoint}/read-one/$id',
       );
       if (response.statusCode != 200) {
-        throw ApiError(ApiErrorType.server, 'Failed to mark notification as read.');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to mark notification as read.',
+        );
       }
     });
   }
@@ -108,7 +118,10 @@ class ApiService {
         },
       );
       if (response.statusCode != 200) {
-        throw ApiError(ApiErrorType.server, 'Server returned an error: ${response.statusCode}');
+        throw ApiError(
+          ApiErrorType.server,
+          'Server returned an error: ${response.statusCode}',
+        );
       }
     });
   }
@@ -122,7 +135,10 @@ class ApiService {
   // Helper to wrap API calls with error handling and connectivity check
   Future<T> _safeApiCall<T>(Future<T> Function() apiCall) async {
     if (!await _isOnline()) {
-      throw ApiError(ApiErrorType.offline, "No internet connection. Please check your connection and try again.");
+      throw ApiError(
+        ApiErrorType.offline,
+        "No internet connection. Please check your connection and try again.",
+      );
     }
     try {
       return await apiCall();
@@ -130,11 +146,23 @@ class ApiService {
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
           e.type == DioExceptionType.sendTimeout) {
-        throw ApiError(ApiErrorType.network, "Network timeout. Please try again.", e);
+        throw ApiError(
+          ApiErrorType.network,
+          "Network timeout. Please try again.",
+          e,
+        );
       } else if (e.type == DioExceptionType.badResponse) {
-        throw ApiError(ApiErrorType.server, "Server error:  ${e.response?.statusCode}", e);
+        throw ApiError(
+          ApiErrorType.server,
+          "Server error:  ${e.response?.statusCode}",
+          e,
+        );
       } else {
-        throw ApiError(ApiErrorType.network, "Network error. Please check your connection.", e);
+        throw ApiError(
+          ApiErrorType.network,
+          "Network error. Please check your connection.",
+          e,
+        );
       }
     } catch (e) {
       throw ApiError(ApiErrorType.unknown, "Unexpected error occurred.", e);
@@ -167,7 +195,10 @@ class ApiService {
 
         return (reports, center);
       } else {
-        throw ApiError(ApiErrorType.server, 'Failed to load reports api :  ${response.statusCode}');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to load reports api :  ${response.statusCode}',
+        );
       }
     });
   }
@@ -183,7 +214,10 @@ class ApiService {
             : response.data['data']; // Adjust based on your API
         return data.map((json) => Report.fromJson(json)).toList();
       } else {
-        throw ApiError(ApiErrorType.server, 'Failed to load reports api : ${response.statusCode}');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to load reports api : ${response.statusCode}',
+        );
       }
     });
   }
@@ -197,7 +231,10 @@ class ApiService {
         dynamic data = response.data;
         return Report.fromJson(data);
       } else {
-        throw ApiError(ApiErrorType.server, 'Failed to load reports api : ${response.statusCode}');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to load reports api : ${response.statusCode}',
+        );
       }
     });
   }
@@ -213,7 +250,10 @@ class ApiService {
             : response.data['data'];
         return data.map((json) => DamageType.fromJson(json)).toList();
       } else {
-        throw ApiError(ApiErrorType.server, 'Failed to load damage types: ${response.statusCode}');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to load damage types: ${response.statusCode}',
+        );
       }
     });
   }
@@ -234,7 +274,10 @@ class ApiService {
           user: User.fromJson(response.data['user']),
         );
       } else {
-        throw ApiError(ApiErrorType.server, 'Failed to authenticate: Invalid response from server.');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to authenticate: Invalid response from server.',
+        );
       }
     });
   }
@@ -250,7 +293,10 @@ class ApiService {
             : response.data['data'];
         return data.map((json) => Severity.fromJson(json)).toList();
       } else {
-        throw ApiError(ApiErrorType.server, 'Failed to load severities: ${response.statusCode}');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to load severities: ${response.statusCode}',
+        );
       }
     });
   }
@@ -264,7 +310,10 @@ class ApiService {
         dynamic data = response.data;
         return User.fromJson(data);
       } else {
-        throw ApiError(ApiErrorType.server, 'Failed to load profile api :  ${response.statusCode}');
+        throw ApiError(
+          ApiErrorType.server,
+          'Failed to load profile api :  ${response.statusCode}',
+        );
       }
     });
   }

@@ -79,15 +79,14 @@ class _AppInitializerState extends ConsumerState<AppInitializer> {
   Widget build(BuildContext context) {
     final theme = widget.theme;
     final authState = ref.watch(authProvider);
-    ref.listen<AsyncValue<bool>>(appConnectivityProvider, (previous, next) {
-      final isOnline = next.value ?? false;
-      final wasOnline = previous?.value ?? false;
-
-      // Trigger queue processing when transitioning from offline to online.
-      if (isOnline && !wasOnline) {
-        ref.read(reportRepositoryProvider).processPendingQueue(ref);
-      }
-    });
+    // ref.listen<AsyncValue<AuthState>>(authProvider, (previous, next) {
+    //   if (next.hasValue) {
+    //     final authState = next.value!;
+    //     if (authState is Authenticated) {
+    //       ref.read(notificationServiceProvider).setupFcm();
+    //     }
+    //   }
+    // });
 
     // This MaterialApp will be the root for either Onboarding or MyApp
     return MaterialApp(
