@@ -7,7 +7,6 @@ import 'package:infra_report/repositories/report_repository.dart';
 import 'package:infra_report/screens/report_details/report_details_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infra_report/services/api_service.dart';
-import 'package:infra_report/utils/logger.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
@@ -41,15 +40,19 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     });
 
     try {
-      // Get the ApiService instance from its provider
       final apiService = ref.read(apiServiceProvider);
-      // Call the API method
       await apiService.markAllNotificationsAsRead();
-
-      // After the API call succeeds, invalidate the notifications provider
-      // to refetch the data from the server. This will update the UI
-      // and the unread count badge automatically.
       ref.invalidate(notificationsProvider);
+    } on ApiError catch (e) {
+      if (mounted) {
+        String message = e.message;
+        if (e.type == ApiErrorType.offline) {
+          message = "You are offline. Cannot mark notifications as read.";
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message), backgroundColor: Colors.red),
+        );
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -88,29 +91,17 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     AppNotification notification,
   ) async {
     if (notification.reportId == null) {
-      // No action for notifications without a reportId
       return;
     }
-
-    // --- NAVIGATION LOGIC ---
-    // This part is left "un functional" as requested, but the logic is here.
-    // To make it functional, you need a method in your repository to fetch a single report.
-    log.info("Tapped notification for report ID: ${notification.reportId}");
-
-    // --- PSEUDO-CODE FOR FUNCTIONAL IMPLEMENTATION ---
-
     final loading = DialogRoute(
       context: context,
       builder: (_) => Center(child: CircularProgressIndicator()),
     );
-
     Navigator.of(context).push(loading);
-
     try {
       final repo = ref.read(reportRepositoryProvider);
-      // You would need to implement getReportById in your repository
       final report = await repo.getReportById(id: notification.reportId!);
-      Navigator.of(context).pop(loading); // Dismiss loading dialog
+      Navigator.of(context).pop(loading);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -121,8 +112,17 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           .read(apiServiceProvider)
           .markNotificationAsRead(notification.id);
       await _refreshNotifications();
+    } on ApiError catch (e) {
+      Navigator.of(context).pop();
+      String message = e.message;
+      if (e.type == ApiErrorType.offline) {
+        message = "You are offline. Cannot load report details.";
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), backgroundColor: Colors.red),
+      );
     } catch (e) {
-      Navigator.of(context).pop(); // Dismiss loading dialog
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Could not find report details.'),
@@ -228,7 +228,6 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          // In the .when(error: ...) of notificationsAsync
           error: (error, stack) {
             String message = "Failed to load notifications.";
             if (error is ApiError) {
@@ -250,24 +249,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                      size: 50,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(message, textAlign: TextAlign.center),
-                    const SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      onPressed: _refreshNotifications,
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Try Again'),
-                    ),
-                  ],
-                ),
+                child: Text(message, textAlign: TextAlign.center),
               ),
             );
           },
