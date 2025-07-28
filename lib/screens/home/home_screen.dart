@@ -1,7 +1,6 @@
 // lib/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for AnnotatedRegion
-import 'package:geolocator/geolocator.dart';
 import 'package:infra_report/config/google_map_style.dart';
 import 'package:infra_report/models/home_map_data.dart';
 import 'package:infra_report/providers/home_map_data_provider.dart';
@@ -105,6 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         statusBarIconBrightness: statusBarIconBrightnessForMap,
         statusBarBrightness: statusBarBrightnessForMap, // For iOS
       ),
+      // Ensures content is not under system UI (notch, status bar, etc.)
       child: Scaffold(
         // No AppBar, so the body will extend to the top of the screen.
         // The GoogleMap widget itself should handle its content positioning
@@ -210,7 +210,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   myLocationButtonEnabled: false,
                   mapToolbarEnabled: true,
 
-                  padding: EdgeInsets.only(top: 40.0),
+                  padding: EdgeInsets.only(
+                    top: 16.0,
+                  ), // Add padding for status bar
                   // The map controls (like zoom buttons, Google logo) will
                   // typically be inset by default to avoid the status bar.
                   // The map tiles themselves should render edge-to-edge.
