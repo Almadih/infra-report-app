@@ -1,4 +1,6 @@
 // lib/screens/home/home_screen.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for AnnotatedRegion
 import 'package:infra_report/config/google_map_style.dart';
@@ -71,7 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(homeMapDataProvider, (previous, next) {
+    ref.listen<AsyncValue<HomeMapData>>(homeMapDataProvider, (previous, next) {
       // Check if the new state is an error state
       if (next is AsyncError) {
         final error = next.error;
@@ -81,6 +83,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             LocationDialogHelper.showLocationErrorDialog(context, error);
           });
+        }
+      }
+
+      if (!next.isLoading && next.hasValue) {
+        // Check if the map controller has been created yet.
+        if (_mapController != null) {
+          final homeMapData = next.value!;
+          _mapController!.animateCamera(
+            CameraUpdate.newCameraPosition(getCameraPosition(homeMapData)),
+          );
         }
       }
     });
@@ -147,11 +159,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         body: homeMapAsyncValue.when(
           data: (homeMapData) {
-            if (_mapController != null) {
-              _mapController!.animateCamera(
-                CameraUpdate.newCameraPosition(getCameraPosition(homeMapData)),
-              );
-            }
             final reports = homeMapData.reports;
             final int selectedIndex = _selectedReport == null
                 ? -1
@@ -176,19 +183,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 zIndexInt: isSelected
                     ? 1
                     : 0, // Bring selected marker to the front
-                onTap: () {
-                  setState(() {
-                    _selectedReport = report;
-                  });
-                  // Animate camera to the selected marker
-                  _mapController?.animateCamera(
-                    CameraUpdate.newLatLng(
-                      LatLng(
-                        report.location.coordinates[1],
-                        report.location.coordinates[0],
+                onTap: () async {
+                  await _mapController?.animateCamera(
+                    CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                        target: LatLng(
+                          report.location.coordinates[1],
+                          report.location.coordinates[0],
+                        ),
+                        zoom: 14.0,
                       ),
                     ),
                   );
+
+                  setState(() {
+                    _selectedReport = report;
+                  });
+                  log.info("selecting report ${report.id}");
                 },
               );
             }).toSet();
@@ -203,6 +214,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     setState(() {
                       _selectedReport = null;
                     });
+                    _mapController!.animateCamera(
+                      CameraUpdate.newCameraPosition(
+                        getCameraPosition(homeMapData),
+                      ),
+                    );
                   },
                   // myLocationButtonEnabled: true,
                   zoomControlsEnabled: false,
@@ -247,11 +263,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               setState(() {
                                 _selectedReport = nextReport;
                               });
+
                               _mapController?.animateCamera(
-                                CameraUpdate.newLatLng(
-                                  LatLng(
-                                    nextReport.location.coordinates[1],
-                                    nextReport.location.coordinates[0],
+                                CameraUpdate.newCameraPosition(
+                                  CameraPosition(
+                                    target: LatLng(
+                                      nextReport.location.coordinates[1],
+                                      nextReport.location.coordinates[0],
+                                    ),
+                                    zoom: 14.0,
                                   ),
                                 ),
                               );
@@ -263,11 +283,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               setState(() {
                                 _selectedReport = prevReport;
                               });
+
                               _mapController?.animateCamera(
-                                CameraUpdate.newLatLng(
-                                  LatLng(
-                                    prevReport.location.coordinates[1],
-                                    prevReport.location.coordinates[0],
+                                CameraUpdate.newCameraPosition(
+                                  CameraPosition(
+                                    target: LatLng(
+                                      prevReport.location.coordinates[1],
+                                      prevReport.location.coordinates[0],
+                                    ),
+                                    zoom: 14.0,
                                   ),
                                 ),
                               );
